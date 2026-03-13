@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DiDiKidsMD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f9c8e8 0%, #fde79a 30%, #a8edea 65%, #b5d6ff 100%);
+      font-family: 'Nunito', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Floating bubbles */
+    .bubble {
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.25;
+      animation: float linear infinite;
+      pointer-events: none;
+    }
+    @keyframes float {
+      0%   { transform: translateY(110vh) scale(0.8); opacity: 0; }
+      10%  { opacity: 0.25; }
+      90%  { opacity: 0.25; }
+      100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    }
+
+    .center {
+      text-align: center;
+      padding: 3rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Stars / sparkles around title */
+    .sparkle {
+      position: absolute;
+      font-size: 1.8rem;
+      animation: spin 4s linear infinite, bob 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+
+      /* Colourful gradient text */
+      background: linear-gradient(90deg, #ff6b9d, #ff9a3c, #ffe600, #4cd964, #5ac8fa, #a855f7);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      animation: shimmer 4s linear infinite, pop-in 0.8s cubic-bezier(.3,1.6,.5,1) both;
+      filter: drop-shadow(0 4px 18px rgba(255,120,180,0.35));
+    }
+    @keyframes shimmer {
+      to { background-position: 300% center; }
+    }
+    @keyframes pop-in {
+      0%   { opacity: 0; transform: scale(0.5) rotate(-6deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    .subtitle {
+      margin-top: 1.2rem;
+      font-size: clamp(1rem, 2.8vw, 1.5rem);
+      color: #6b4f9e;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: fade-up 0.8s 0.6s ease forwards;
+    }
+    @keyframes fade-up {
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+    }
+
+    /* Rainbow underline bar */
+    .bar {
+      margin: 1.4rem auto 0;
+      width: 260px;
+      height: 6px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #ff6b9d, #ff9a3c, #ffe600, #4cd964, #5ac8fa, #a855f7);
+      opacity: 0;
+      animation: fade-up 0.8s 0.9s ease forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating bubbles -->
+  <script>
+    const colors = ['#ff6b9d','#ffd166','#06d6a0','#118cf5','#a855f7','#ff9a3c'];
+    for (let i = 0; i < 18; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = 40 + Math.random() * 100;
+      b.style.cssText = `
+        width:${size}px; height:${size}px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        left:${Math.random()*100}vw;
+        animation-duration:${8+Math.random()*10}s;
+        animation-delay:${Math.random()*10}s;
+      `;
+      document.body.appendChild(b);
+    }
+  </script>
+
+  <div class="center">
+    <!-- Sparkle emojis -->
+    <span class="sparkle" style="top:-30px; left:-20px; animation-delay:0s;">⭐</span>
+    <span class="sparkle" style="top:-10px; right:-30px; animation-delay:1.2s;">🌟</span>
+    <span class="sparkle" style="bottom:-20px; left:10px; animation-delay:2s;">✨</span>
+    <span class="sparkle" style="bottom:-30px; right:0px; animation-delay:0.6s;">🎈</span>
+
+    <h1>Bine ați venit la DiDiKidsMD!!!</h1>
+    <div class="bar"></div>
+    <p class="subtitle">🌈 Un loc magic pentru cei mici 🌈</p>
+  </div>
+
+</body>
+</html>
