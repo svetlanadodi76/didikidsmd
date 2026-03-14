@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Didikidsmd – Haine care îmbrățișează copilăria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --brown: #4a2c2a;
+      --brown-light: #7a4f4a;
+      --brown-mid: #5c3633;
+      --gold: #c9a96e;
+      --bear-yellow: #e8c068;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--brown);
+      font-family: 'Cormorant Garamond', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      position: relative;
+      background: radial-gradient(ellipse at 50% 30%, #ede5d4 0%, var(--cream) 70%);
+    }
+
+    /* Subtle texture overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234a2c2a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* Bear SVG */
+    .bear-wrap {
+      margin-bottom: 2rem;
+      animation: float-bear 4s ease-in-out infinite;
+    }
+    @keyframes float-bear {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .bear-wrap svg {
+      width: 110px;
+      height: 110px;
+      filter: drop-shadow(0 8px 24px rgba(74,44,42,0.15));
+    }
+
+    /* Brand name */
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      opacity: 0;
+      animation: fade-up 1s 0.3s ease forwards;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      font-weight: 400;
+      color: var(--brown-light);
+      letter-spacing: 0.08em;
+      margin-top: 0.8rem;
+      opacity: 0;
+      animation: fade-up 1s 0.6s ease forwards;
+    }
+
+    .divider {
+      width: 80px;
+      height: 1px;
+      background: var(--gold);
+      margin: 2rem auto;
+      opacity: 0;
+      animation: fade-up 1s 0.8s ease forwards;
+    }
+
+    .gentle {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      color: var(--brown);
+      line-height: 1.1;
+      opacity: 0;
+      animation: fade-up 1s 1s ease forwards;
+    }
+
+    .gentle-sub {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--brown-light);
+      margin-top: 0.3rem;
+      opacity: 0;
+      animation: fade-up 1s 1.2s ease forwards;
+    }
+
+    .cta-btn {
+      margin-top: 3rem;
+      display: inline-block;
+      padding: 0.9rem 2.8rem;
+      border: 1.5px solid var(--brown);
+      color: var(--brown);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fade-up 1s 1.4s ease forwards;
+    }
+    .cta-btn:hover {
+      background: var(--brown);
+      color: var(--cream);
+    }
+
+    /* ── ABOUT SECTION ── */
+    .about {
+      padding: 6rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .about h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--brown);
+      margin-bottom: 1.5rem;
+    }
+
+    .about p {
+      font-size: 1.2rem;
+      line-height: 1.9;
+      color: var(--brown-light);
+      font-style: italic;
+    }
+
+    /* ── VALUES ── */
+    .values {
+      background: var(--brown);
+      color: var(--cream);
+      padding: 5rem 2rem;
+    }
+
+    .values-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 3rem;
+      text-align: center;
+    }
+
+    .value-item .icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .value-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .value-item p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #c9b8a8;
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(74,44,42,0.15);
+    }
+
+    footer .bear-small {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    footer p {
+      font-size: 0.95rem;
+      color: var(--brown-light);
+      letter-spacing: 0.05em;
+    }
+
+    footer .brand-footer {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--brown);
+      margin-bottom: 0.3rem;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- Bear logo SVG -->
+    <div class="bear-wrap">
+      <svg viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg">
+        <!-- Urechi mai departate -->
+        <ellipse cx="48" cy="52" rx="36" ry="32" fill="#6b3a5a"/>
+        <ellipse cx="172" cy="52" rx="36" ry="32" fill="#6b3a5a"/>
+        <ellipse cx="48" cy="52" rx="28" ry="25" fill="#e8b84b"/>
+        <ellipse cx="172" cy="52" rx="28" ry="25" fill="#e8b84b"/>
+        <!-- Punct oval maro interior urechi -->
+        <ellipse cx="48" cy="54" rx="13" ry="11" fill="#6b3a5a" opacity="0.55"/>
+        <ellipse cx="172" cy="54" rx="13" ry="11" fill="#6b3a5a" opacity="0.55"/>
+
+        <!-- Contur cap (mov inchis) -->
+        <ellipse cx="110" cy="128" rx="92" ry="84" fill="#6b3a5a"/>
+        <!-- Fata galbena calda -->
+        <ellipse cx="110" cy="126" rx="85" ry="78" fill="#e8b84b"/>
+
+        <!-- Bot crem/bej deschis -->
+        <ellipse cx="110" cy="152" rx="38" ry="30" fill="#f0d9a0"/>
+
+        <!-- Sprancene curbate -->
+        <path d="M72 95 Q83 86 94 93" stroke="#6b3a5a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <path d="M126 93 Q137 86 148 95" stroke="#6b3a5a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Ochi mici -->
+        <circle cx="85" cy="110" r="8" fill="#6b3a5a"/>
+        <circle cx="135" cy="110" r="8" fill="#6b3a5a"/>
+        <!-- Reflexie ochi -->
+        <circle cx="88" cy="107" r="3" fill="white"/>
+        <circle cx="138" cy="107" r="3" fill="white"/>
+
+        <!-- Nas oval -->
+        <ellipse cx="110" cy="141" rx="13" ry="9" fill="#6b3a5a"/>
+
+        <!-- Gura discreta -->
+        <line x1="110" y1="150" x2="110" y2="158" stroke="#6b3a5a" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M98 158 Q110 168 122 158" stroke="#6b3a5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <h1 class="brand-name">didikidsmd</h1>
+    <p class="tagline">Haine care îmbrățișează copilăria.</p>
+
+    <div class="divider"></div>
+
+    <p class="gentle">Gentle</p>
+    <p class="gentle-sub">by Didikidsmd</p>
+
+    <a href="#despre" class="cta-btn">Descoperă colecția</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="despre">
+    <p class="section-label">Povestea noastră</p>
+    <h2>Creat cu dragoste pentru cei mai mici</h2>
+    <p>
+      La Didikidsmd credem că fiecare copil merită haine care îi lasă libertatea să exploreze, să râdă și să viseze. 
+      Materiale blânde, culori calde și croieli gândite cu grijă — pentru că copilăria e cea mai frumoasă aventură.
+    </p>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values">
+    <div class="values-inner">
+      <div class="value-item">
+        <div class="icon">🌿</div>
+        <h3>Materiale naturale</h3>
+        <p>Bumbac organic și țesături blânde, prietenoase cu pielea sensibilă a copiilor.</p>
+      </div>
+      <div class="value-item">
+        <div class="icon">🐻</div>
+        <h3>Design cu suflet</h3>
+        <p>Fiecare piesă este gândită cu drag, inspirată din lumea magică a copilăriei.</p>
+      </div>
+      <div class="value-item">
+        <div class="icon">✨</div>
+        <h3>Calitate Gentle</h3>
+        <p>Colecția Gentle — rafinament și confort în fiecare detaliu, pentru copii speciali.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="bear-small">🐻</div>
+    <p class="brand-footer">didikidsmd</p>
+    <p>Haine care îmbrățișează copilăria.</p>
+  </footer>
+
+</body>
+</html>
