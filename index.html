@@ -785,6 +785,140 @@
     }
     .footer-bottom a { color: var(--gold); }
 
+    /* ── CART BTN ── */
+    .cart-btn { position:relative; background:none; border:none; cursor:pointer; color:var(--plum); padding:0.3rem; display:flex; align-items:center; }
+    .cart-badge { position:absolute; top:-5px; right:-7px; background:var(--gold); color:var(--plum); font-size:0.62rem; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .cart-badge.hidden { display:none; }
+
+    /* ── CATALOG ── */
+    .catalog { padding:7rem 3rem; max-width:1200px; margin:0 auto; }
+
+    .gender-tabs { display:flex; border-bottom:2px solid var(--cream-dark); margin-bottom:2.5rem; }
+    .gender-tab { padding:0.9rem 2.5rem; background:none; border:none; font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--text-muted); cursor:pointer; position:relative; transition:color .3s; }
+    .gender-tab::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px; background:var(--plum); transform:scaleX(0); transition:transform .3s; }
+    .gender-tab.active { color:var(--plum); }
+    .gender-tab.active::after { transform:scaleX(1); }
+
+    .cat-filters { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:3rem; }
+    .cat-filter { padding:0.45rem 1.2rem; border:1px solid var(--cream-dark); background:none; font-family:'Cormorant Garamond',serif; font-size:0.95rem; letter-spacing:0.06em; color:var(--text-muted); cursor:pointer; transition:all .3s; }
+    .cat-filter:hover { border-color:var(--plum); color:var(--plum); }
+    .cat-filter.active { background:var(--plum); border-color:var(--plum); color:var(--cream); }
+
+    .products-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem; }
+    .products-empty { grid-column:1/-1; text-align:center; padding:4rem; color:var(--text-muted); font-style:italic; }
+
+    /* ── PRODUCT CARD ── */
+    .product-card { cursor:pointer; }
+    .product-card:hover .prod-img { transform:scale(1.04); }
+    .product-card:hover .card-overlay { opacity:1; }
+
+    .prod-img-wrap { position:relative; overflow:hidden; background:var(--cream-mid); }
+    .prod-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; transition:transform .5s ease; }
+    .prod-placeholder { width:100%; aspect-ratio:3/4; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; transition:transform .5s ease; }
+    .prod-placeholder.rochie  { background:linear-gradient(145deg,#f2dce8,#e8c4d4); }
+    .prod-placeholder.costum  { background:linear-gradient(145deg,#dde8f5,#c4d4e8); }
+    .prod-placeholder.sport   { background:linear-gradient(145deg,#e8f0dd,#d4e0c4); }
+    .prod-placeholder-icon { font-size:3.5rem; }
+    .prod-placeholder-label { font-family:'Playfair Display',serif; font-size:0.9rem; color:var(--text-muted); letter-spacing:0.1em; text-transform:uppercase; }
+
+    .card-overlay { position:absolute; inset:0; background:rgba(92,45,74,0.08); display:flex; align-items:flex-end; justify-content:center; padding-bottom:1.5rem; opacity:0; transition:opacity .3s; }
+    .card-select-btn { padding:0.6rem 2rem; background:var(--cream); color:var(--plum); border:none; font-family:'Cormorant Garamond',serif; font-size:0.9rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; }
+
+    .card-fav { position:absolute; top:0.8rem; right:0.8rem; background:rgba(250,246,240,.9); border:none; width:34px; height:34px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; transition:all .3s; color:var(--text-muted); }
+    .card-fav:hover, .card-fav.active { color:#e05a7a; background:white; }
+
+    .prod-body { padding:1rem 0.2rem; }
+    .prod-cod { font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); }
+    .prod-name { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--plum); margin:0.2rem 0 0.3rem; }
+    .prod-price { font-size:1rem; color:var(--text); }
+
+    /* ── PRODUCT MODAL ── */
+    .modal-overlay { position:fixed; inset:0; background:rgba(58,31,45,.5); z-index:300; opacity:0; pointer-events:none; transition:opacity .3s; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+
+    .modal { background:var(--cream); max-width:900px; width:100%; max-height:90vh; overflow-y:auto; display:grid; grid-template-columns:1fr 1fr; position:relative; }
+    .modal-close { position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-muted); z-index:10; line-height:1; }
+
+    .modal-photos { background:var(--cream-mid); }
+    .modal-main-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+    .modal-main-placeholder { width:100%; aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; font-size:6rem; }
+    .modal-main-placeholder.rochie { background:linear-gradient(145deg,#f2dce8,#e8c4d4); }
+    .modal-main-placeholder.costum { background:linear-gradient(145deg,#dde8f5,#c4d4e8); }
+    .modal-main-placeholder.sport  { background:linear-gradient(145deg,#e8f0dd,#d4e0c4); }
+
+    .modal-details { padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1.2rem; }
+    .modal-cod { font-size:0.75rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); }
+    .modal-name { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:400; color:var(--plum); line-height:1.2; }
+    .modal-price { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--text); }
+    .modal-material { font-size:0.95rem; font-style:italic; color:var(--text-muted); }
+
+    .modal-sizes-title { font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem; }
+    .modal-sizes { display:flex; flex-wrap:wrap; gap:0.5rem; }
+    .modal-size-chip { padding:0.4rem 0.9rem; border:1px solid var(--cream-dark); background:none; font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--text); cursor:pointer; transition:all .2s; }
+    .modal-size-chip:hover { border-color:var(--plum); color:var(--plum); }
+    .modal-size-chip.selected { background:var(--plum); border-color:var(--plum); color:var(--cream); }
+
+    /* Size guide */
+    .size-guide-toggle { background:none; border:none; font-family:'Cormorant Garamond',serif; font-size:0.95rem; color:var(--plum); cursor:pointer; text-decoration:underline; text-underline-offset:3px; text-align:left; padding:0; display:flex; align-items:center; gap:0.4rem; }
+    .size-guide-table { display:none; margin-top:0.8rem; border-collapse:collapse; width:100%; font-size:0.9rem; }
+    .size-guide-table.open { display:table; }
+    .size-guide-table th { font-family:'Playfair Display',serif; font-weight:400; color:var(--plum); padding:0.4rem 0.8rem; border-bottom:1px solid var(--cream-dark); text-align:left; font-size:0.82rem; letter-spacing:0.08em; }
+    .size-guide-table td { padding:0.4rem 0.8rem; border-bottom:1px solid var(--cream-mid); color:var(--text-muted); }
+
+    .modal-qty { display:flex; align-items:center; gap:1rem; }
+    .qty-btn { width:32px; height:32px; border:1px solid var(--cream-dark); background:none; font-size:1.1rem; cursor:pointer; color:var(--plum); display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .qty-btn:hover { background:var(--plum); color:var(--cream); border-color:var(--plum); }
+    .qty-val { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--text); min-width:24px; text-align:center; }
+
+    .modal-actions { display:flex; flex-direction:column; gap:0.7rem; margin-top:auto; }
+    .btn-modal-cart { width:100%; padding:0.9rem; background:var(--plum); color:var(--cream); border:none; font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background .3s; }
+    .btn-modal-cart:hover { background:var(--text); }
+    .btn-modal-cart:disabled { background:var(--cream-dark); color:var(--text-muted); cursor:default; }
+    .btn-modal-fav { width:100%; padding:0.75rem; background:none; border:1.5px solid var(--plum); color:var(--plum); font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.1em; cursor:pointer; transition:all .3s; }
+    .btn-modal-fav:hover, .btn-modal-fav.active { background:var(--plum); color:var(--cream); }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay { position:fixed; inset:0; background:rgba(58,31,45,.4); z-index:290; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .cart-overlay.open { opacity:1; pointer-events:all; }
+    .cart-drawer { position:fixed; top:0; right:0; bottom:0; width:400px; max-width:100vw; background:var(--cream); z-index:295; transform:translateX(100%); transition:transform .35s ease; display:flex; flex-direction:column; }
+    .cart-drawer.open { transform:translateX(0); }
+    .cart-head { padding:1.8rem 2rem; border-bottom:1px solid var(--cream-dark); display:flex; align-items:center; justify-content:space-between; }
+    .cart-head-title { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--plum); }
+    .cart-head-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-muted); }
+    .cart-body { flex:1; overflow-y:auto; padding:1.5rem 2rem; }
+    .cart-empty-msg { text-align:center; padding:3rem 1rem; color:var(--text-muted); font-style:italic; line-height:1.8; }
+    .cart-item { display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--cream-mid); }
+    .cart-item-thumb { width:70px; height:80px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:2rem; }
+    .cart-item-thumb.rochie { background:linear-gradient(145deg,#f2dce8,#e8c4d4); }
+    .cart-item-thumb.costum { background:linear-gradient(145deg,#dde8f5,#c4d4e8); }
+    .cart-item-thumb.sport  { background:linear-gradient(145deg,#e8f0dd,#d4e0c4); }
+    .cart-item-info { flex:1; }
+    .cart-item-cod { font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); }
+    .cart-item-name { font-family:'Playfair Display',serif; font-size:1rem; color:var(--plum); margin:0.15rem 0; }
+    .cart-item-meta { font-size:0.88rem; color:var(--text-muted); }
+    .cart-item-price { font-size:1rem; font-weight:600; color:var(--text); margin-top:0.3rem; }
+    .cart-item-del { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem; align-self:flex-start; padding:0.2rem; }
+    .cart-foot { padding:1.5rem 2rem; border-top:1px solid var(--cream-dark); }
+    .cart-total-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; }
+    .cart-total-lbl { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--plum); }
+    .cart-total-val { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--plum); }
+    .btn-checkout-tg { display:flex; align-items:center; justify-content:center; gap:0.5rem; width:100%; padding:0.9rem; background:var(--plum); color:var(--cream); border:none; font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background .3s; text-decoration:none; margin-bottom:0.6rem; }
+    .btn-checkout-tg:hover { background:var(--text); }
+    .btn-checkout-form { width:100%; padding:0.9rem; background:none; border:1.5px solid var(--plum); color:var(--plum); font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:all .3s; }
+    .btn-checkout-form:hover { background:var(--plum); color:var(--cream); }
+    #favDrawer { transform:translateX(-100%); }
+    #favDrawer.open { transform:translateX(0); }
+    .fav-item { display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--cream-mid); align-items:center; cursor:pointer; }
+    .fav-item:hover .fav-item-name { color:var(--gold); }
+    .fav-item-thumb { width:60px; height:70px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.8rem; }
+    .fav-item-thumb.rochie { background:linear-gradient(145deg,#f2dce8,#e8c4d4); }
+    .fav-item-thumb.costum { background:linear-gradient(145deg,#dde8f5,#c4d4e8); }
+    .fav-item-thumb.sport  { background:linear-gradient(145deg,#e8f0dd,#d4e0c4); }
+    .fav-item-info { flex:1; }
+    .fav-item-cod  { font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); }
+    .fav-item-name { font-family:'Playfair Display',serif; font-size:1rem; color:var(--plum); transition:color .2s; }
+    .fav-item-del  { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem; padding:0.2rem; }
+
     /* ── SCROLL REVEAL ── */
     .reveal {
       opacity: 0;
@@ -828,6 +962,13 @@
       .about { padding: 5rem 1.5rem; }
       .values { padding: 5rem 1.5rem; }
       .testimonials { padding: 5rem 1.5rem; }
+      .catalog { padding: 5rem 1.5rem; }
+      .products-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; }
+      .modal { grid-template-columns: 1fr; }
+      .modal-photos { max-height: 50vw; overflow: hidden; }
+      .modal-main-placeholder { aspect-ratio: 4/3; }
+      .cart-drawer { width: 100vw; }
+      .gender-tab { padding: 0.7rem 1.4rem; font-size: 1rem; }
     }
   </style>
 </head>
@@ -840,14 +981,23 @@
     <span class="nav-logo-text">didikidsmd</span>
   </div>
   <ul class="nav-links">
-    <li><a href="#colectii">Colecții</a></li>
+    <li><a href="#catalog">Catalog</a></li>
     <li><a href="#despre">Despre noi</a></li>
-    <li><a href="#valori">Filosofie</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
-  <button class="nav-toggle" id="navToggle" aria-label="Meniu">
-    <span></span><span></span><span></span>
-  </button>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <button class="cart-btn" id="favBtn" aria-label="Favorite" onclick="openFavorites()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      <span class="cart-badge hidden" id="favBadge">0</span>
+    </button>
+    <button class="cart-btn" id="cartBtn" aria-label="Coș">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-badge hidden" id="cartBadge">0</span>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="Meniu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- Mobile nav -->
@@ -911,7 +1061,7 @@
         <p class="coll-age">Hăinuțe pentru ea</p>
         <h3 class="coll-name">Fete</h3>
         <p class="coll-desc">Rochițe, costumașe și ținute gingașe — pentru micile prințese pline de viață.</p>
-        <a href="https://t.me/didikidsmd_bot" target="_blank" class="coll-cta">Comandă pe Telegram</a>
+        <a href="#catalog" onclick="setGender('fete')" class="coll-cta">Explorează colecția →</a>
       </div>
     </div>
 
@@ -923,11 +1073,61 @@
         <p class="coll-age">Hăinuțe pentru el</p>
         <h3 class="coll-name">Băieți</h3>
         <p class="coll-desc">Costume, tricouri și ținute comfy — pentru micii aventurieri mereu în mișcare.</p>
-        <a href="https://t.me/didikidsmd_bot" target="_blank" class="coll-cta">Comandă pe Telegram</a>
+        <a href="#catalog" onclick="setGender('baieti')" class="coll-cta">Explorează colecția →</a>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ── CATALOG ── -->
+<section class="catalog" id="catalog">
+  <div class="section-header reveal">
+    <span class="section-label">Colecția noastră</span>
+    <h2 class="section-title">Alege pentru micul tău</h2>
+  </div>
+  <div class="gender-tabs">
+    <button class="gender-tab active" data-gender="fete" onclick="setGender('fete')">🎀 Fete</button>
+    <button class="gender-tab" data-gender="baieti" onclick="setGender('baieti')">🚀 Băieți</button>
+  </div>
+  <div class="cat-filters" id="catFilters"></div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ── PRODUCT MODAL ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="productModal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-photos" id="modalPhotos"></div>
+    <div class="modal-details" id="modalDetails"></div>
+  </div>
+</div>
+
+<!-- ── CART ── -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeAllDrawers()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <span class="cart-head-title">Coșul meu</span>
+    <button class="cart-head-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-lbl">Total</span>
+      <span class="cart-total-val" id="cartTotalVal">0 MDL</span>
+    </div>
+    <a href="#" class="btn-checkout-tg" id="checkoutTgBtn">🤖 Comandă pe Telegram</a>
+    <button class="btn-checkout-form" onclick="alert('Formularul de comandă — în curând!')">📋 Comandă fără Telegram</button>
+  </div>
+</div>
+
+<!-- ── FAVORITES DRAWER ── -->
+<div class="cart-drawer" id="favDrawer" style="left:0;right:auto;transform:translateX(-100%);">
+  <div class="cart-head">
+    <span class="cart-head-title">♥ Favorite</span>
+    <button class="cart-head-close" onclick="closeFavorites()">✕</button>
+  </div>
+  <div class="cart-body" id="favBody"></div>
+</div>
 
 <!-- ── BANNER ── -->
 <section class="banner">
@@ -1149,6 +1349,366 @@
     });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
+
+  /* ── CATALOG CONFIG ── */
+  const CATEGORIES = {
+    fete:   [
+      { id:'toate',   label:'Toate produsele' },
+      { id:'rochie',  label:'Rochițe',  keyword:'rochie' },
+      { id:'costum',  label:'Costume',  keyword:'costum' },
+      { id:'sport',   label:'Sport',    keyword:'sport'  },
+    ],
+    baieti: [
+      { id:'toate',   label:'Toate produsele' },
+      { id:'costum',  label:'Costume',  keyword:'costum' },
+      { id:'sport',   label:'Sport',    keyword:'sport'  },
+    ]
+  };
+
+  const SIZE_GUIDE = [
+    { marime:80,  varsta:'1–2 ani',  inaltime:'~80 cm'  },
+    { marime:90,  varsta:'2–3 ani',  inaltime:'~90 cm'  },
+    { marime:100, varsta:'3–4 ani',  inaltime:'~100 cm' },
+    { marime:110, varsta:'4–5 ani',  inaltime:'~110 cm' },
+    { marime:120, varsta:'5–6 ani',  inaltime:'~120 cm' },
+    { marime:130, varsta:'6–7 ani',  inaltime:'~130 cm' },
+    { marime:140, varsta:'7–8 ani',  inaltime:'~140 cm' },
+  ];
+
+  const ICONS = { rochie:'🌸', costum:'🧸', sport:'⚽' };
+
+  /* Date demo — înlocuite cu API Google Sheets în Faza 5 */
+  const PRODUCTS = [
+    { cod:'001', name:'Rochie',    gen:'fete',   tip:'rochie', marimi:[80,90,100,110],    material:'Bumbac 100%' },
+    { cod:'002', name:'Rochie',    gen:'fete',   tip:'rochie', marimi:[90,100,110,120],   material:'Bumbac 100%' },
+    { cod:'003', name:'Rochie',    gen:'fete',   tip:'rochie', marimi:[80,90],            material:'Bumbac 100%' },
+    { cod:'004', name:'Costum',    gen:'fete',   tip:'costum', marimi:[80,90,100],        material:'Bumbac 100%' },
+    { cod:'005', name:'Set sport', gen:'fete',   tip:'sport',  marimi:[100,110,120,130],  material:'Bumbac 100%' },
+    { cod:'006', name:'Costum',    gen:'baieti', tip:'costum', marimi:[80,90,100,110],    material:'Bumbac 100%' },
+    { cod:'007', name:'Costum',    gen:'baieti', tip:'costum', marimi:[90,100,110],       material:'Bumbac 100%' },
+    { cod:'008', name:'Set sport', gen:'baieti', tip:'sport',  marimi:[100,110,120,130],  material:'Bumbac 100%' },
+  ];
+
+  let currentGender = 'fete';
+  let currentCat    = 'toate';
+  let cart          = JSON.parse(localStorage.getItem('didi_cart') || '[]');
+  let favorites     = JSON.parse(localStorage.getItem('didi_favs') || '[]');
+
+  /* ── CATALOG ── */
+  function setGender(gender) {
+    currentGender = gender;
+    currentCat    = 'toate';
+    document.querySelectorAll('.gender-tab').forEach(t =>
+      t.classList.toggle('active', t.dataset.gender === gender)
+    );
+    renderFilters();
+    renderProducts();
+  }
+
+  function renderFilters() {
+    document.getElementById('catFilters').innerHTML =
+      CATEGORIES[currentGender].map(c => `
+        <button class="cat-filter ${c.id === currentCat ? 'active' : ''}"
+                onclick="setCategory('${c.id}')">${c.label}</button>
+      `).join('');
+  }
+
+  function setCategory(catId) {
+    currentCat = catId;
+    renderFilters();
+    renderProducts();
+  }
+
+  function filterProducts() {
+    return PRODUCTS.filter(p => {
+      if (currentGender === 'fete'   && p.tip !== 'rochie' && p.gen !== 'fete')   return false;
+      if (currentGender === 'baieti' && p.gen !== 'baieti')                        return false;
+      if (currentCat === 'toate') return true;
+      const cat = CATEGORIES[currentGender].find(c => c.id === currentCat);
+      return cat && p.tip === cat.keyword;
+    });
+  }
+
+  function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    const list = filterProducts();
+    if (!list.length) {
+      grid.innerHTML = '<p class="products-empty">Produse în curs de adăugare...</p>';
+      return;
+    }
+    grid.innerHTML = list.map(p => {
+      const isFav = favorites.includes(p.cod);
+      return `
+        <div class="product-card" onclick="openModal('${p.cod}')">
+          <div class="prod-img-wrap">
+            <div class="prod-placeholder ${p.tip}">
+              <span class="prod-placeholder-icon">${ICONS[p.tip] || '👕'}</span>
+              <span class="prod-placeholder-label">${p.name}</span>
+            </div>
+            <div class="card-overlay">
+              <button class="card-select-btn">Selectează</button>
+            </div>
+            <button class="card-fav ${isFav ? 'active' : ''}"
+                    onclick="event.stopPropagation();toggleFav('${p.cod}',this)">
+              ${isFav ? '♥' : '♡'}
+            </button>
+          </div>
+          <div class="prod-body">
+            <p class="prod-cod">${p.cod}</p>
+            <p class="prod-name">${p.name}</p>
+            <p class="prod-price">— MDL</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ── MODAL ── */
+  let modalQty = 1;
+  let modalSelectedSize = null;
+
+  function openModal(cod) {
+    const p = PRODUCTS.find(x => x.cod === cod);
+    if (!p) return;
+    modalQty = 1;
+    modalSelectedSize = null;
+    const isFav = favorites.includes(p.cod);
+
+    document.getElementById('modalPhotos').innerHTML = `
+      <div class="modal-main-placeholder ${p.tip}">${ICONS[p.tip] || '👕'}</div>
+    `;
+
+    const sizeChips = p.marimi.map(s => `
+      <button class="modal-size-chip" onclick="selectModalSize(${s},this)">${s}</button>
+    `).join('');
+
+    const guideRows = SIZE_GUIDE.map(r => `
+      <tr><td>${r.marime}</td><td>${r.varsta}</td><td>${r.inaltime}</td></tr>
+    `).join('');
+
+    document.getElementById('modalDetails').innerHTML = `
+      <p class="modal-cod">${p.cod}</p>
+      <h2 class="modal-name">${p.name}</h2>
+      <p class="modal-price">— MDL</p>
+      <p class="modal-material">${p.material}</p>
+      <div>
+        <p class="modal-sizes-title">Mărimi disponibile</p>
+        <div class="modal-sizes">${sizeChips}</div>
+      </div>
+      <div>
+        <button class="size-guide-toggle" onclick="toggleSizeGuide()">
+          📏 Ghid mărimi
+        </button>
+        <table class="size-guide-table" id="sizeGuideTable">
+          <thead><tr><th>Mărime</th><th>Vârstă</th><th>Înălțime</th></tr></thead>
+          <tbody>${guideRows}</tbody>
+        </table>
+      </div>
+      <div class="modal-qty">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-val" id="modalQtyVal">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cart" id="modalCartBtn" disabled
+                onclick="addToCartFromModal('${p.cod}')">
+          Selectează mai întâi mărimea
+        </button>
+        <button class="btn-modal-fav ${isFav ? 'active' : ''}" id="modalFavBtn"
+                onclick="toggleFavModal('${p.cod}')">
+          ${isFav ? '♥ Salvat la favorite' : '♡ Adaugă la favorite'}
+        </button>
+      </div>
+    `;
+
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  function selectModalSize(size, btn) {
+    document.querySelectorAll('.modal-size-chip').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
+    modalSelectedSize = size;
+    const cartBtn = document.getElementById('modalCartBtn');
+    cartBtn.disabled = false;
+    cartBtn.textContent = 'Adaugă în coș';
+  }
+
+  function toggleSizeGuide() {
+    document.getElementById('sizeGuideTable').classList.toggle('open');
+  }
+
+  function changeQty(delta) {
+    modalQty = Math.max(1, modalQty + delta);
+    document.getElementById('modalQtyVal').textContent = modalQty;
+  }
+
+  function addToCartFromModal(cod) {
+    if (!modalSelectedSize) return;
+    const p   = PRODUCTS.find(x => x.cod === cod);
+    const key = `${cod}-${modalSelectedSize}`;
+    const ex  = cart.find(i => i.key === key);
+    if (ex) { ex.qty += modalQty; }
+    else { cart.push({ key, cod, name:p.name, tip:p.tip, size:modalSelectedSize, qty:modalQty }); }
+    saveCart();
+    updateCartBadge();
+    const btn = document.getElementById('modalCartBtn');
+    btn.textContent = '✓ Adăugat în coș!';
+    btn.style.background = 'var(--gold)';
+    setTimeout(() => { btn.textContent = 'Adaugă în coș'; btn.style.background = ''; }, 2000);
+  }
+
+  function toggleFavModal(cod) {
+    const btn = document.getElementById('modalFavBtn');
+    const idx = favorites.indexOf(cod);
+    if (idx > -1) {
+      favorites.splice(idx, 1);
+      btn.classList.remove('active');
+      btn.textContent = '♡ Adaugă la favorite';
+    } else {
+      favorites.push(cod);
+      btn.classList.add('active');
+      btn.textContent = '♥ Salvat la favorite';
+    }
+    localStorage.setItem('didi_favs', JSON.stringify(favorites));
+    updateFavBadge();
+    renderProducts();
+  }
+
+  /* ── FAVORITES ── */
+  function toggleFav(cod, btn) {
+    const idx = favorites.indexOf(cod);
+    if (idx > -1) { favorites.splice(idx,1); btn.classList.remove('active'); btn.textContent='♡'; }
+    else          { favorites.push(cod);      btn.classList.add('active');    btn.textContent='♥'; }
+    localStorage.setItem('didi_favs', JSON.stringify(favorites));
+    updateFavBadge();
+  }
+
+  function updateFavBadge() {
+    const badge = document.getElementById('favBadge');
+    badge.textContent = favorites.length;
+    badge.classList.toggle('hidden', favorites.length === 0);
+  }
+
+  function openFavorites() {
+    renderFavDrawer();
+    document.getElementById('favDrawer').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFavorites() {
+    document.getElementById('favDrawer').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function renderFavDrawer() {
+    const body = document.getElementById('favBody');
+    const favProds = PRODUCTS.filter(p => favorites.includes(p.cod));
+    if (!favProds.length) {
+      body.innerHTML = '<div class="cart-empty-msg">♡<br><br>Niciun produs salvat.<br>Apasă ♡ pe produsele care îți plac!</div>';
+      return;
+    }
+    body.innerHTML = favProds.map(p => `
+      <div class="fav-item" onclick="closeFavorites();openModal('${p.cod}')">
+        <div class="fav-item-thumb ${p.tip}">${ICONS[p.tip]||'👕'}</div>
+        <div class="fav-item-info">
+          <p class="fav-item-cod">${p.cod}</p>
+          <p class="fav-item-name">${p.name}</p>
+        </div>
+        <button class="fav-item-del" onclick="event.stopPropagation();removeFav('${p.cod}')">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function removeFav(cod) {
+    favorites = favorites.filter(f => f !== cod);
+    localStorage.setItem('didi_favs', JSON.stringify(favorites));
+    updateFavBadge();
+    renderFavDrawer();
+    renderProducts();
+  }
+
+  /* ── CART ── */
+  function saveCart() { localStorage.setItem('didi_cart', JSON.stringify(cart)); }
+
+  function updateCartBadge() {
+    const total = cart.reduce((s,i) => s+i.qty, 0);
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = total;
+    badge.classList.toggle('hidden', total === 0);
+  }
+
+  function openCart() {
+    renderCart();
+    document.getElementById('cartDrawer').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCart() {
+    document.getElementById('cartDrawer').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeAllDrawers() {
+    document.getElementById('cartDrawer').classList.remove('open');
+    document.getElementById('favDrawer').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function renderCart() {
+    const body = document.getElementById('cartBody');
+    const foot = document.getElementById('cartFoot');
+    if (!cart.length) {
+      body.innerHTML = '<div class="cart-empty-msg">🐻<br><br>Coșul tău e gol.<br>Adaugă produse din catalog!</div>';
+      foot.style.display = 'none';
+      return;
+    }
+    body.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-thumb ${item.tip}">${ICONS[item.tip]||'👕'}</div>
+        <div class="cart-item-info">
+          <p class="cart-item-cod">${item.cod}</p>
+          <p class="cart-item-name">${item.name}</p>
+          <p class="cart-item-meta">Mărimea ${item.size} · Cantitate: ${item.qty}</p>
+          <p class="cart-item-price">— MDL</p>
+        </div>
+        <button class="cart-item-del" onclick="removeFromCart('${item.key}')">✕</button>
+      </div>
+    `).join('');
+    foot.style.display = 'block';
+    const msg = cart.map(i=>`${i.cod} x${i.qty} (mări.${i.size})`).join(', ');
+    document.getElementById('checkoutTgBtn').href =
+      `https://t.me/didikidsmd_bot?start=cos_${encodeURIComponent(msg)}`;
+  }
+
+  function removeFromCart(key) {
+    cart = cart.filter(i => i.key !== key);
+    saveCart();
+    updateCartBadge();
+    renderCart();
+  }
+
+  document.getElementById('cartBtn').addEventListener('click', openCart);
+
+  /* Init */
+  renderFilters();
+  renderProducts();
+  updateCartBadge();
+  updateFavBadge();
 
   /* ── Newsletter ── */
   function handleNewsletter(e) {
