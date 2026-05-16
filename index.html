@@ -906,6 +906,11 @@
     .btn-checkout-tg:hover { background:var(--text); }
     .btn-checkout-form { width:100%; padding:0.9rem; background:none; border:1.5px solid var(--plum); color:var(--plum); font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:all .3s; }
     .btn-checkout-form:hover { background:var(--plum); color:var(--cream); }
+    .contact-options { display:none; flex-direction:column; gap:0; margin-top:0.3rem; border:1px solid var(--cream-dark); }
+    .contact-options.open { display:flex; }
+    .contact-opt { display:flex; align-items:center; gap:0.8rem; padding:0.85rem 1.2rem; font-family:'Cormorant Garamond',serif; font-size:0.95rem; color:var(--text); letter-spacing:0.05em; text-decoration:none; transition:background .2s; border-bottom:1px solid var(--cream-mid); }
+    .contact-opt:last-child { border-bottom:none; }
+    .contact-opt:hover { background:var(--cream-mid); color:var(--plum); }
     #favDrawer { transform:translateX(-100%); }
     #favDrawer.open { transform:translateX(0); }
     .fav-item { display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--cream-mid); align-items:center; cursor:pointer; }
@@ -918,6 +923,48 @@
     .fav-item-cod  { font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); }
     .fav-item-name { font-family:'Playfair Display',serif; font-size:1rem; color:var(--plum); transition:color .2s; }
     .fav-item-del  { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem; padding:0.2rem; }
+
+    /* ── ORDER FORM MODAL ── */
+    .order-overlay { position:fixed; inset:0; background:rgba(58,31,45,.55); z-index:400; opacity:0; pointer-events:none; transition:opacity .3s; display:flex; align-items:center; justify-content:center; padding:1rem; }
+    .order-overlay.open { opacity:1; pointer-events:all; }
+
+    .order-modal { background:var(--cream); width:100%; max-width:600px; max-height:90vh; overflow-y:auto; position:relative; padding:2.5rem 2.5rem 2rem; }
+    .order-modal-close { position:absolute; top:1rem; right:1.2rem; background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-muted); }
+
+    .order-title { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--plum); margin-bottom:0.3rem; }
+    .order-subtitle { font-size:0.9rem; color:var(--text-muted); font-style:italic; margin-bottom:1.8rem; }
+
+    .order-summary { background:var(--cream-mid); padding:1rem 1.2rem; margin-bottom:1.8rem; }
+    .order-summary-title { font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:0.7rem; }
+    .order-summary-item { display:flex; justify-content:space-between; font-size:0.95rem; color:var(--text); padding:0.2rem 0; }
+    .order-summary-total { display:flex; justify-content:space-between; font-family:'Playfair Display',serif; font-size:1rem; color:var(--plum); margin-top:0.7rem; padding-top:0.7rem; border-top:1px solid var(--cream-dark); }
+
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+    .form-group { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1rem; }
+    .form-group.full { grid-column:1/-1; }
+    .form-label { font-size:0.78rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); }
+    .form-input { padding:0.75rem 1rem; border:1px solid var(--cream-dark); background:white; font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--text); outline:none; transition:border-color .2s; }
+    .form-input:focus { border-color:var(--plum); }
+    .form-input::placeholder { color:var(--plum-soft); }
+
+    .form-select { padding:0.75rem 1rem; border:1px solid var(--cream-dark); background:white; font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--text); outline:none; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235c2d4a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 1rem center; }
+    .form-select:focus { border-color:var(--plum); }
+
+    .form-divider { font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin:1.5rem 0 1rem; border-bottom:1px solid var(--cream-dark); padding-bottom:0.5rem; }
+
+    .btn-submit-order { width:100%; padding:1rem; background:var(--plum); color:var(--cream); border:none; font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; transition:background .3s; margin-top:1.5rem; }
+    .btn-submit-order:hover { background:var(--text); }
+    .btn-submit-order:disabled { background:var(--cream-dark); color:var(--text-muted); cursor:default; }
+
+    .order-success { text-align:center; padding:2rem 1rem; }
+    .order-success-icon { font-size:3rem; margin-bottom:1rem; }
+    .order-success-title { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--plum); margin-bottom:0.5rem; }
+    .order-success-msg { color:var(--text-muted); font-size:1rem; line-height:1.7; }
+
+    @media (max-width:900px) {
+      .order-modal { padding:2rem 1.5rem 1.5rem; }
+      .form-row { grid-template-columns:1fr; }
+    }
 
     /* ── SCROLL REVEAL ── */
     .reveal {
@@ -1115,8 +1162,22 @@
       <span class="cart-total-lbl">Total</span>
       <span class="cart-total-val" id="cartTotalVal">0 MDL</span>
     </div>
-    <a href="#" class="btn-checkout-tg" id="checkoutTgBtn">🤖 Comandă pe Telegram</a>
-    <button class="btn-checkout-form" onclick="alert('Formularul de comandă — în curând!')">📋 Comandă fără Telegram</button>
+    <button class="btn-checkout-tg" onclick="openOrderForm()">Comandă acum</button>
+    <button class="btn-checkout-form" onclick="toggleContactOptions()">Contactează-ne ▾</button>
+    <div class="contact-options" id="contactOptions">
+      <a href="https://t.me/didikidsmd_bot" target="_blank" class="contact-opt">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+        Contactează-ne pe Telegram
+      </a>
+      <a href="https://instagram.com/didikidsmd" target="_blank" class="contact-opt">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.facebook.com/people/didikidsmd/61573466164142/" target="_blank" class="contact-opt">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.03 4.388 11.024 10.125 11.927v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796v8.437C19.612 23.097 24 18.103 24 12.073z"/></svg>
+        Facebook
+      </a>
+    </div>
   </div>
 </div>
 
@@ -1127,6 +1188,14 @@
     <button class="cart-head-close" onclick="closeFavorites()">✕</button>
   </div>
   <div class="cart-body" id="favBody"></div>
+</div>
+
+<!-- ── ORDER FORM MODAL ── -->
+<div class="order-overlay" id="orderOverlay" onclick="closeOrderOutside(event)">
+  <div class="order-modal" id="orderModal">
+    <button class="order-modal-close" onclick="closeOrder()">✕</button>
+    <div id="orderContent"></div>
+  </div>
 </div>
 
 <!-- ── BANNER ── -->
@@ -1490,7 +1559,6 @@
       <p class="modal-cod">${p.cod}</p>
       <h2 class="modal-name">${p.name}</h2>
       <p class="modal-price">— MDL</p>
-      <p class="modal-material">${p.material}</p>
       <div>
         <p class="modal-sizes-title">Mărimi disponibile</p>
         <div class="modal-sizes">${sizeChips}</div>
@@ -1656,9 +1724,14 @@
     document.body.style.overflow = 'hidden';
   }
 
+  function toggleContactOptions() {
+    document.getElementById('contactOptions').classList.toggle('open');
+  }
+
   function closeCart() {
     document.getElementById('cartDrawer').classList.remove('open');
     document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('contactOptions').classList.remove('open');
     document.body.style.overflow = '';
   }
 
@@ -1690,9 +1763,6 @@
       </div>
     `).join('');
     foot.style.display = 'block';
-    const msg = cart.map(i=>`${i.cod} x${i.qty} (mări.${i.size})`).join(', ');
-    document.getElementById('checkoutTgBtn').href =
-      `https://t.me/didikidsmd_bot?start=cos_${encodeURIComponent(msg)}`;
   }
 
   function removeFromCart(key) {
@@ -1709,6 +1779,132 @@
   renderProducts();
   updateCartBadge();
   updateFavBadge();
+
+  /* ── ORDER FORM ── */
+  function openOrderForm() {
+    if (!cart.length) return;
+    closeCart();
+    renderOrderForm();
+    document.getElementById('orderOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeOrder() {
+    document.getElementById('orderOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeOrderOutside(e) {
+    if (e.target === document.getElementById('orderOverlay')) closeOrder();
+  }
+
+  function renderOrderForm() {
+    const summary = cart.map(i => `
+      <div class="order-summary-item">
+        <span>${i.name} · Mări. ${i.size} × ${i.qty}</span>
+        <span>— MDL</span>
+      </div>
+    `).join('');
+
+    document.getElementById('orderContent').innerHTML = `
+      <h2 class="order-title">Completează comanda</h2>
+      <p class="order-subtitle">Vei primi o confirmare pe email după ce comanda e procesată.</p>
+
+      <div class="order-summary">
+        <p class="order-summary-title">Rezumat comandă</p>
+        ${summary}
+        <div class="order-summary-total">
+          <span>Total</span>
+          <span>— MDL</span>
+        </div>
+      </div>
+
+      <form id="orderForm" onsubmit="submitOrder(event)">
+        <p class="form-divider">Date personale</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nume și prenume *</label>
+            <input class="form-input" type="text" name="nume" placeholder="ex: Maria Ionescu" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefon *</label>
+            <input class="form-input" type="tel" name="telefon" placeholder="ex: +373 69 123 456" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input class="form-input" type="email" name="email" placeholder="ex: maria@gmail.com" required/>
+        </div>
+
+        <p class="form-divider">Livrare</p>
+        <div class="form-group">
+          <label class="form-label">Metodă de livrare *</label>
+          <select class="form-select" name="livrare" required>
+            <option value="">— Selectează —</option>
+            <option value="Poșta Moldovei">Poșta Moldovei</option>
+            <option value="Curier">Curier</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Localitate *</label>
+            <input class="form-input" type="text" name="localitate" placeholder="ex: Chișinău" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adresă *</label>
+            <input class="form-input" type="text" name="adresa" placeholder="ex: str. Ștefan cel Mare 10" required/>
+          </div>
+        </div>
+
+        <button class="btn-submit-order" type="submit" id="submitOrderBtn">
+          Trimite comanda
+        </button>
+      </form>
+    `;
+  }
+
+  async function submitOrder(e) {
+    e.preventDefault();
+    const form   = document.getElementById('orderForm');
+    const btn    = document.getElementById('submitOrderBtn');
+    const data   = Object.fromEntries(new FormData(form));
+    data.produse = cart.map(i => `${i.cod} x${i.qty} (mări.${i.size})`).join(', ');
+
+    btn.disabled    = true;
+    btn.textContent = 'Se trimite...';
+
+    try {
+      const res = await fetch('/api/order', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        cart = [];
+        saveCart();
+        updateCartBadge();
+        document.getElementById('orderContent').innerHTML = `
+          <div class="order-success">
+            <div class="order-success-icon">🐻</div>
+            <h2 class="order-success-title">Comanda a fost trimisă!</h2>
+            <p class="order-success-msg">
+              Mulțumim, <strong>${data.nume}</strong>!<br>
+              Vei primi o confirmare pe <strong>${data.email}</strong><br>
+              în cel mai scurt timp.
+            </p>
+          </div>
+        `;
+        setTimeout(closeOrder, 4000);
+      } else {
+        throw new Error('server error');
+      }
+    } catch {
+      btn.disabled    = false;
+      btn.textContent = 'Trimite comanda';
+      alert('A apărut o eroare. Încearcă din nou sau comandă pe Telegram.');
+    }
+  }
 
   /* ── Newsletter ── */
   function handleNewsletter(e) {
