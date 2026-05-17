@@ -845,6 +845,7 @@
     .modal-main-placeholder.rochie { background:linear-gradient(145deg,#f2dce8,#e8c4d4); }
     .modal-main-placeholder.costum { background:linear-gradient(145deg,#dde8f5,#c4d4e8); }
     .modal-main-placeholder.sport  { background:linear-gradient(145deg,#e8f0dd,#d4e0c4); }
+    .modal-main-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
 
     .modal-details { padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1.2rem; }
     .modal-cod { font-size:0.75rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); }
@@ -919,6 +920,7 @@
     .fav-item-thumb.rochie { background:linear-gradient(145deg,#f2dce8,#e8c4d4); }
     .fav-item-thumb.costum { background:linear-gradient(145deg,#dde8f5,#c4d4e8); }
     .fav-item-thumb.sport  { background:linear-gradient(145deg,#e8f0dd,#d4e0c4); }
+    .fav-item-img { width:60px; height:70px; flex-shrink:0; object-fit:cover; display:block; }
     .fav-item-info { flex:1; }
     .fav-item-cod  { font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); }
     .fav-item-name { font-family:'Playfair Display',serif; font-size:1rem; color:var(--plum); transition:color .2s; }
@@ -1446,17 +1448,43 @@
 
   const ICONS = { rochie:'🌸', costum:'🧸', sport:'⚽' };
 
-  /* Date demo — înlocuite cu API Google Sheets în Faza 5 */
-  const PRODUCTS = [
-    { cod:'001', name:'Rochie',    gen:'fete',   tip:'rochie', marimi:[80,90,100,110],    material:'Bumbac 100%' },
-    { cod:'002', name:'Rochie',    gen:'fete',   tip:'rochie', marimi:[90,100,110,120],   material:'Bumbac 100%' },
-    { cod:'003', name:'Rochie',    gen:'fete',   tip:'rochie', marimi:[80,90],            material:'Bumbac 100%' },
-    { cod:'004', name:'Costum',    gen:'fete',   tip:'costum', marimi:[80,90,100],        material:'Bumbac 100%' },
-    { cod:'005', name:'Set sport', gen:'fete',   tip:'sport',  marimi:[100,110,120,130],  material:'Bumbac 100%' },
-    { cod:'006', name:'Costum',    gen:'baieti', tip:'costum', marimi:[80,90,100,110],    material:'Bumbac 100%' },
-    { cod:'007', name:'Costum',    gen:'baieti', tip:'costum', marimi:[90,100,110],       material:'Bumbac 100%' },
-    { cod:'008', name:'Set sport', gen:'baieti', tip:'sport',  marimi:[100,110,120,130],  material:'Bumbac 100%' },
-  ];
+  let PRODUCTS = [];
+
+  function mapCategorie(categorie) {
+    const c = (categorie || '').toLowerCase();
+    let tip = 'costum';
+    let gen = 'fete';
+    if (c.includes('rochie') || c.includes('rochii')) { tip = 'rochie'; gen = 'fete'; }
+    else if (c.includes('sport'))                      { tip = 'sport'; }
+    else if (c.includes('costum') || c.includes('set')){ tip = 'costum'; }
+    if      (c.includes('baiet') || c.includes('băieț')) gen = 'baieti';
+    else if (c.includes('fete'))                          gen = 'fete';
+    return { tip, gen };
+  }
+
+  async function loadProducts() {
+    try {
+      document.getElementById('productsGrid').innerHTML = '<p class="products-empty">Se încarcă produsele...</p>';
+      const res  = await fetch('/api/catalog');
+      const data = await res.json();
+      PRODUCTS = (data.products || []).map(p => {
+        const { tip, gen } = mapCategorie(p.categorie);
+        return {
+          cod:     p.cod,
+          name:    p.nume,
+          gen,
+          tip,
+          marimi:  p.marimi ? p.marimi.split(',').map(s => s.trim()).filter(Boolean) : [],
+          pret:    p.pret || '',
+          imagine: p.imagine || '',
+        };
+      });
+    } catch(e) {
+      console.error('Eroare la încărcarea produselor:', e);
+    }
+    renderFilters();
+    renderProducts();
+  }
 
   let currentGender = 'fete';
   let currentCat    = 'toate';
@@ -1507,13 +1535,13 @@
     }
     grid.innerHTML = list.map(p => {
       const isFav = favorites.includes(p.cod);
+      const imgHtml = p.imagine
+        ? `<img src="${p.imagine}" alt="${p.name}" class="prod-img" loading="lazy">`
+        : `<div class="prod-placeholder ${p.tip}"><span class="prod-placeholder-icon">${ICONS[p.tip] || '👕'}</span><span class="prod-placeholder-label">${p.name}</span></div>`;
       return `
         <div class="product-card" onclick="openModal('${p.cod}')">
           <div class="prod-img-wrap">
-            <div class="prod-placeholder ${p.tip}">
-              <span class="prod-placeholder-icon">${ICONS[p.tip] || '👕'}</span>
-              <span class="prod-placeholder-label">${p.name}</span>
-            </div>
+            ${imgHtml}
             <div class="card-overlay">
               <button class="card-select-btn">Selectează</button>
             </div>
@@ -1525,7 +1553,7 @@
           <div class="prod-body">
             <p class="prod-cod">${p.cod}</p>
             <p class="prod-name">${p.name}</p>
-            <p class="prod-price">— MDL</p>
+            <p class="prod-price">${p.pret ? p.pret + ' MDL' : '— MDL'}</p>
           </div>
         </div>
       `;
@@ -1543,12 +1571,12 @@
     modalSelectedSize = null;
     const isFav = favorites.includes(p.cod);
 
-    document.getElementById('modalPhotos').innerHTML = `
-      <div class="modal-main-placeholder ${p.tip}">${ICONS[p.tip] || '👕'}</div>
-    `;
+    document.getElementById('modalPhotos').innerHTML = p.imagine
+      ? `<img src="${p.imagine}" alt="${p.name}" class="modal-main-img">`
+      : `<div class="modal-main-placeholder ${p.tip}">${ICONS[p.tip] || '👕'}</div>`;
 
     const sizeChips = p.marimi.map(s => `
-      <button class="modal-size-chip" onclick="selectModalSize(${s},this)">${s}</button>
+      <button class="modal-size-chip" onclick="selectModalSize('${s}',this)">${s}</button>
     `).join('');
 
     const guideRows = SIZE_GUIDE.map(r => `
@@ -1558,7 +1586,7 @@
     document.getElementById('modalDetails').innerHTML = `
       <p class="modal-cod">${p.cod}</p>
       <h2 class="modal-name">${p.name}</h2>
-      <p class="modal-price">— MDL</p>
+      <p class="modal-price">${p.pret ? p.pret + ' MDL' : '— MDL'}</p>
       <div>
         <p class="modal-sizes-title">Mărimi disponibile</p>
         <div class="modal-sizes">${sizeChips}</div>
@@ -1626,7 +1654,7 @@
     const key = `${cod}-${modalSelectedSize}`;
     const ex  = cart.find(i => i.key === key);
     if (ex) { ex.qty += modalQty; }
-    else { cart.push({ key, cod, name:p.name, tip:p.tip, size:modalSelectedSize, qty:modalQty }); }
+    else { cart.push({ key, cod, name:p.name, tip:p.tip, size:modalSelectedSize, qty:modalQty, pret:p.pret }); }
     saveCart();
     updateCartBadge();
     const btn = document.getElementById('modalCartBtn');
@@ -1687,16 +1715,21 @@
       body.innerHTML = '<div class="cart-empty-msg">♡<br><br>Niciun produs salvat.<br>Apasă ♡ pe produsele care îți plac!</div>';
       return;
     }
-    body.innerHTML = favProds.map(p => `
-      <div class="fav-item" onclick="closeFavorites();openModal('${p.cod}')">
-        <div class="fav-item-thumb ${p.tip}">${ICONS[p.tip]||'👕'}</div>
-        <div class="fav-item-info">
-          <p class="fav-item-cod">${p.cod}</p>
-          <p class="fav-item-name">${p.name}</p>
+    body.innerHTML = favProds.map(p => {
+      const thumbHtml = p.imagine
+        ? `<img src="${p.imagine}" alt="${p.name}" class="fav-item-img">`
+        : `<div class="fav-item-thumb ${p.tip}">${ICONS[p.tip]||'👕'}</div>`;
+      return `
+        <div class="fav-item" onclick="closeFavorites();openModal('${p.cod}')">
+          ${thumbHtml}
+          <div class="fav-item-info">
+            <p class="fav-item-cod">${p.cod}</p>
+            <p class="fav-item-name">${p.name}</p>
+          </div>
+          <button class="fav-item-del" onclick="event.stopPropagation();removeFav('${p.cod}')">✕</button>
         </div>
-        <button class="fav-item-del" onclick="event.stopPropagation();removeFav('${p.cod}')">✕</button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function removeFav(cod) {
@@ -1750,6 +1783,7 @@
       foot.style.display = 'none';
       return;
     }
+    const cartTotal = cart.reduce((s,i) => s + (Number(i.pret)||0) * i.qty, 0);
     body.innerHTML = cart.map(item => `
       <div class="cart-item">
         <div class="cart-item-thumb ${item.tip}">${ICONS[item.tip]||'👕'}</div>
@@ -1757,11 +1791,12 @@
           <p class="cart-item-cod">${item.cod}</p>
           <p class="cart-item-name">${item.name}</p>
           <p class="cart-item-meta">Mărimea ${item.size} · Cantitate: ${item.qty}</p>
-          <p class="cart-item-price">— MDL</p>
+          <p class="cart-item-price">${item.pret ? item.pret + ' MDL' : '— MDL'}</p>
         </div>
         <button class="cart-item-del" onclick="removeFromCart('${item.key}')">✕</button>
       </div>
     `).join('');
+    document.getElementById('cartTotalVal').textContent = cartTotal > 0 ? cartTotal + ' MDL' : '— MDL';
     foot.style.display = 'block';
   }
 
@@ -1775,8 +1810,8 @@
   document.getElementById('cartBtn').addEventListener('click', openCart);
 
   /* Init */
-  renderFilters();
-  renderProducts();
+  setGender('fete');
+  loadProducts();
   updateCartBadge();
   updateFavBadge();
 
@@ -1799,10 +1834,11 @@
   }
 
   function renderOrderForm() {
+    const orderTotal = cart.reduce((s,i) => s + (Number(i.pret)||0) * i.qty, 0);
     const summary = cart.map(i => `
       <div class="order-summary-item">
         <span>${i.name} · Mări. ${i.size} × ${i.qty}</span>
-        <span>— MDL</span>
+        <span>${i.pret ? Number(i.pret) * i.qty + ' MDL' : '— MDL'}</span>
       </div>
     `).join('');
 
@@ -1815,7 +1851,7 @@
         ${summary}
         <div class="order-summary-total">
           <span>Total</span>
-          <span>— MDL</span>
+          <span>${orderTotal > 0 ? orderTotal + ' MDL' : '— MDL'}</span>
         </div>
       </div>
 
