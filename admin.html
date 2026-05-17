@@ -24,9 +24,12 @@
 
   /* DASHBOARD */
   #dashboard{display:none}
-  header{background:var(--plum);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+  header{background:var(--plum);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
   header h1{color:#faf6f0;font-size:1.2rem;font-weight:400;letter-spacing:.05em}
   header span{color:var(--gold);font-size:.8rem}
+  .header-right{display:flex;align-items:center;gap:.75rem}
+  .refresh-btn{background:transparent;border:1px solid rgba(201,169,110,.4);color:var(--gold);padding:.4rem .8rem;border-radius:6px;cursor:pointer;font-size:.85rem;transition:all .2s}
+  .refresh-btn:hover{background:rgba(201,169,110,.15)}
   .logout-btn{background:transparent;border:1px solid rgba(201,169,110,.4);color:var(--gold);padding:.4rem 1rem;border-radius:6px;cursor:pointer;font-size:.85rem;transition:all .2s}
   .logout-btn:hover{background:rgba(201,169,110,.15)}
 
@@ -34,11 +37,21 @@
 
   /* STATS */
   .stats{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
-  .stat-card{background:#fff;border-radius:10px;padding:1rem 1.5rem;flex:1;min-width:140px;border-top:3px solid var(--gold)}
+  .stat-card{background:#fff;border-radius:10px;padding:1rem 1.5rem;flex:1;min-width:130px;border-top:3px solid var(--gold);cursor:pointer;transition:box-shadow .2s}
+  .stat-card:hover{box-shadow:0 4px 16px rgba(92,45,74,.12)}
   .stat-card .num{font-size:1.8rem;color:var(--plum);font-weight:600}
   .stat-card .lbl{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 
-  /* FILTERS */
+  /* TOOLBAR */
+  .toolbar{display:flex;gap:.75rem;margin-bottom:.9rem;flex-wrap:wrap;align-items:center}
+  .search-wrap{position:relative;flex:1;min-width:180px}
+  .search-wrap input{width:100%;padding:.55rem 1rem .55rem 2.2rem;border:1.5px solid #e5d8c4;border-radius:20px;font-size:.88rem;background:#fff;color:#3a1f2d;outline:none;transition:border-color .2s}
+  .search-wrap input:focus{border-color:var(--gold)}
+  .search-wrap::before{content:'🔍';position:absolute;left:.7rem;top:50%;transform:translateY(-50%);font-size:.85rem;pointer-events:none}
+  .period-select{padding:.55rem 1rem;border:1.5px solid #e5d8c4;border-radius:20px;font-size:.88rem;background:#fff;color:#3a1f2d;outline:none;cursor:pointer;transition:border-color .2s}
+  .period-select:focus{border-color:var(--gold)}
+
+  /* STATUS FILTERS */
   .filters{display:flex;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap}
   .filter-btn{padding:.45rem 1.1rem;border-radius:20px;border:1.5px solid #e5d8c4;background:#fff;color:var(--muted);font-size:.85rem;cursor:pointer;transition:all .2s}
   .filter-btn.active{background:var(--plum);color:#fff;border-color:var(--plum)}
@@ -49,7 +62,9 @@
   th{background:var(--soft);color:var(--plum);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 1rem;text-align:left;font-weight:600}
   td{padding:.85rem 1rem;border-bottom:1px solid #f0e8d8;font-size:.9rem;vertical-align:middle}
   tr:last-child td{border-bottom:none}
-  tr:hover td{background:#fdf9f5}
+  tbody tr{cursor:pointer;transition:background .15s}
+  tbody tr:hover td{background:#fdf9f5}
+  .actions-cell{cursor:default}
 
   /* STATUS BADGE */
   .badge{display:inline-block;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:.05em}
@@ -69,7 +84,7 @@
   /* EMPTY */
   .empty{text-align:center;padding:3rem;color:var(--muted);font-style:italic}
 
-  /* MODAL */
+  /* MODAL BASE */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(58,31,45,.5);z-index:100;align-items:center;justify-content:center;padding:1rem}
   .modal-overlay.open{display:flex}
   .modal{background:#fff;border-radius:14px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
@@ -87,6 +102,18 @@
   .nota-section{background:var(--soft);border-radius:8px;padding:1rem;margin-top:1rem;border-left:3px solid var(--gold)}
   .nota-section p{font-size:.78rem;color:var(--muted);margin-bottom:.5rem}
 
+  /* DETAILS MODAL */
+  #detailsModal .modal{max-width:540px}
+  .detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #f0e8d8}
+  .detail-header h2{margin:0}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem}
+  .detail-item label{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+  .detail-item span{font-size:.95rem;color:#3a1f2d;font-weight:500}
+  .detail-produse{background:var(--soft);padding:1rem;border-radius:8px;border-left:3px solid var(--gold);margin-bottom:1.2rem}
+  .detail-produse label{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+  .detail-produse span{font-size:.95rem}
+  .detail-actions{display:flex;gap:.6rem;flex-wrap:wrap;padding-top:1rem;border-top:1px solid #f0e8d8;margin-top:.5rem}
+
   /* TOAST */
   #toast{position:fixed;bottom:2rem;right:2rem;background:#3a1f2d;color:#fff;padding:.9rem 1.5rem;border-radius:10px;font-size:.9rem;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:200}
   #toast.show{opacity:1;transform:translateY(0)}
@@ -98,10 +125,12 @@
   .spinner{width:32px;height:32px;border:3px solid #e5d8c4;border-top-color:var(--plum);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  @media(max-width:600px){
+  @media(max-width:640px){
     .dashboard-body{padding:1rem}
     header{padding:.8rem 1rem}
     .stats{gap:.6rem}
+    .detail-grid{grid-template-columns:1fr}
+    .toolbar{gap:.5rem}
   }
 </style>
 </head>
@@ -132,18 +161,61 @@
       <h1>DiDiKidsMD — Comenzi</h1>
       <span id="headerDate"></span>
     </div>
-    <button class="logout-btn" onclick="doLogout()">Ieșire</button>
+    <div class="header-right">
+      <button class="refresh-btn" onclick="loadOrders()">↻ Actualizează</button>
+      <button class="logout-btn" onclick="doLogout()">Ieșire</button>
+    </div>
   </header>
   <div class="dashboard-body">
     <div class="stats" id="stats"></div>
-    <div class="filters" id="filters">
+
+    <!-- Toolbar: search + period -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Caută după nume client..." oninput="renderTable()"/>
+      </div>
+      <select class="period-select" id="periodSelect" onchange="renderTable()">
+        <option value="">Toate perioadele</option>
+      </select>
+    </div>
+
+    <!-- Status filters -->
+    <div class="filters">
       <button class="filter-btn active" data-status="toate" onclick="setFilter(this)">Toate</button>
       <button class="filter-btn" data-status="Nou" onclick="setFilter(this)">🟡 Noi</button>
       <button class="filter-btn" data-status="Confirmat" onclick="setFilter(this)">🟢 Confirmate</button>
       <button class="filter-btn" data-status="Anulat" onclick="setFilter(this)">🔴 Anulate</button>
     </div>
+
     <div class="table-wrap" id="tableWrap">
       <div class="loading"><div class="spinner"></div>Se încarcă comenzile...</div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILS MODAL -->
+<div class="modal-overlay" id="detailsModal">
+  <div class="modal">
+    <div class="detail-header">
+      <h2 id="dTitle">Detalii comandă</h2>
+      <span id="dBadge"></span>
+    </div>
+    <div class="detail-produse">
+      <label>Produse comandate</label>
+      <span id="dProduse"></span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><label>Client</label><span id="dNume"></span></div>
+      <div class="detail-item"><label>Telefon</label><span id="dTelefon"></span></div>
+      <div class="detail-item"><label>Email</label><span id="dEmail"></span></div>
+      <div class="detail-item"><label>Data</label><span id="dData"></span></div>
+      <div class="detail-item"><label>Livrare</label><span id="dLivrare"></span></div>
+      <div class="detail-item"><label>Sursă</label><span id="dSursa"></span></div>
+      <div class="detail-item" style="grid-column:1/-1"><label>Adresă</label><span id="dAdresa"></span></div>
+    </div>
+    <div class="detail-actions" id="dActions"></div>
+    <div class="modal-actions" style="margin-top:1rem">
+      <button class="btn-secondary" onclick="closeDetails()">Închide</button>
     </div>
   </div>
 </div>
@@ -188,7 +260,7 @@
       <textarea id="eNota" placeholder="ex: Comanda va fi expediată mâine. Prețul total: 450 MDL." rows="2"></textarea>
     </div>
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal()">Anulează</button>
+      <button class="btn-secondary" onclick="closeEditModal()">Anulează</button>
       <button class="btn-save" onclick="saveEdit()">Salvează</button>
     </div>
   </div>
@@ -213,7 +285,26 @@
 let TOKEN = localStorage.getItem('didi_admin_token') || '';
 let allOrders = [];
 let currentFilter = 'toate';
-let pendingAction = null; // { rowIndex, action, order }
+let pendingAction = null;
+
+const MONTHS_RO = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
+
+/* ── DATE HELPERS ── */
+function parseDate(str) {
+  // format dd.mm.yyyy
+  const p = (str || '').split('.');
+  if (p.length !== 3) return null;
+  return new Date(+p[2], +p[1]-1, +p[0]);
+}
+function monthKey(str) {
+  const d = parseDate(str);
+  if (!d) return '';
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function monthLabel(key) {
+  const [y, m] = key.split('-');
+  return `${MONTHS_RO[+m-1]} ${y}`;
+}
 
 /* ── AUTH ── */
 async function doLogin() {
@@ -221,21 +312,17 @@ async function doLogin() {
   const password = document.getElementById('loginPassword').value;
   const errEl    = document.getElementById('loginError');
   errEl.textContent = '';
-
   try {
     const res  = await fetch('/api/admin-login', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ email, password }),
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error || 'Eroare'; return; }
     TOKEN = data.token;
     localStorage.setItem('didi_admin_token', TOKEN);
     showDashboard();
-  } catch (e) {
-    errEl.textContent = 'Eroare de conexiune';
-  }
+  } catch(e) { errEl.textContent = 'Eroare de conexiune'; }
 }
 
 function doLogout() {
@@ -245,7 +332,6 @@ function doLogout() {
   document.getElementById('loginScreen').style.display = 'flex';
 }
 
-/* ── ENTER ON LOGIN ── */
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
 });
@@ -254,35 +340,59 @@ document.addEventListener('keydown', e => {
 function showDashboard() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('ro-MD', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('ro-MD',{weekday:'long',day:'numeric',month:'long'});
   loadOrders();
 }
 
 async function loadOrders() {
   document.getElementById('tableWrap').innerHTML = '<div class="loading"><div class="spinner"></div>Se încarcă comenzile...</div>';
   try {
-    const res  = await fetch('/api/admin-orders', { headers: { 'Authorization': `Bearer ${TOKEN}` } });
+    const res  = await fetch('/api/admin-orders', { headers:{ 'Authorization': `Bearer ${TOKEN}` } });
     if (res.status === 401) { doLogout(); return; }
     const data = await res.json();
-    allOrders  = (data.orders || []).reverse(); // newest first
+    allOrders  = (data.orders || []).reverse();
+    buildPeriodFilter();
     renderStats();
     renderTable();
-  } catch (e) {
+  } catch(e) {
     document.getElementById('tableWrap').innerHTML = '<div class="empty">Eroare la încărcarea comenzilor.</div>';
   }
 }
 
+/* ── PERIOD FILTER ── */
+function buildPeriodFilter() {
+  const keys = [...new Set(allOrders.map(o => monthKey(o.data)).filter(Boolean))].sort().reverse();
+  const sel  = document.getElementById('periodSelect');
+  const cur  = sel.value;
+  sel.innerHTML = '<option value="">Toate perioadele</option>' +
+    keys.map(k => `<option value="${k}"${k===cur?' selected':''}>${monthLabel(k)}</option>`).join('');
+}
+
+/* ── STATS ── */
 function renderStats() {
   const total     = allOrders.length;
-  const noi       = allOrders.filter(o => o.status === 'Nou').length;
-  const confirmate= allOrders.filter(o => o.status === 'Confirmat').length;
-  const anulate   = allOrders.filter(o => o.status === 'Anulat').length;
+  const noi       = allOrders.filter(o => o.status==='Nou').length;
+  const confirmate= allOrders.filter(o => o.status==='Confirmat').length;
+  const anulate   = allOrders.filter(o => o.status==='Anulat').length;
   document.getElementById('stats').innerHTML = `
-    <div class="stat-card"><div class="num">${total}</div><div class="lbl">Total comenzi</div></div>
-    <div class="stat-card" style="border-top-color:#856404"><div class="num">${noi}</div><div class="lbl">Noi</div></div>
-    <div class="stat-card" style="border-top-color:#0f5132"><div class="num">${confirmate}</div><div class="lbl">Confirmate</div></div>
-    <div class="stat-card" style="border-top-color:#842029"><div class="num">${anulate}</div><div class="lbl">Anulate</div></div>
-  `;
+    <div class="stat-card" onclick="resetFilters()"><div class="num">${total}</div><div class="lbl">Total comenzi</div></div>
+    <div class="stat-card" style="border-top-color:#856404" onclick="setFilterByStatus('Nou')"><div class="num">${noi}</div><div class="lbl">Noi</div></div>
+    <div class="stat-card" style="border-top-color:#0f5132" onclick="setFilterByStatus('Confirmat')"><div class="num">${confirmate}</div><div class="lbl">Confirmate</div></div>
+    <div class="stat-card" style="border-top-color:#842029" onclick="setFilterByStatus('Anulat')"><div class="num">${anulate}</div><div class="lbl">Anulate</div></div>`;
+}
+
+function resetFilters() {
+  currentFilter = 'toate';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('periodSelect').value = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.status==='toate'));
+  renderTable();
+}
+
+function setFilterByStatus(status) {
+  currentFilter = status;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.status===status));
+  renderTable();
 }
 
 function setFilter(btn) {
@@ -292,37 +402,47 @@ function setFilter(btn) {
   renderTable();
 }
 
-function renderTable() {
-  const orders = currentFilter === 'toate'
-    ? allOrders
-    : allOrders.filter(o => o.status === currentFilter);
+/* ── RENDER TABLE ── */
+function getFilteredOrders() {
+  const search = document.getElementById('searchInput').value.trim().toLowerCase();
+  const period = document.getElementById('periodSelect').value;
 
+  return allOrders.filter(o => {
+    if (currentFilter !== 'toate' && o.status !== currentFilter) return false;
+    if (search && !o.nume.toLowerCase().includes(search) && !o.telefon.includes(search)) return false;
+    if (period && monthKey(o.data) !== period) return false;
+    return true;
+  });
+}
+
+function badge(status) {
+  if (status==='Nou')       return `<span class="badge badge-nou">Nou</span>`;
+  if (status==='Confirmat') return `<span class="badge badge-confirmat">Confirmat</span>`;
+  return `<span class="badge badge-anulat">Anulat</span>`;
+}
+
+function renderTable() {
+  const orders = getFilteredOrders();
   if (!orders.length) {
     document.getElementById('tableWrap').innerHTML = '<div class="empty">Nicio comandă găsită.</div>';
     return;
   }
 
   const rows = orders.map(o => {
-    const badge = o.status === 'Nou'
-      ? `<span class="badge badge-nou">Nou</span>`
-      : o.status === 'Confirmat'
-        ? `<span class="badge badge-confirmat">Confirmat</span>`
-        : `<span class="badge badge-anulat">Anulat</span>`;
-
     const actions = o.status === 'Nou' ? `
-      <div class="actions">
+      <div class="actions" onclick="event.stopPropagation()">
         <button class="btn-confirm" onclick="askAction(${o.rowIndex},'confirm')">✅ Confirmă</button>
         <button class="btn-cancel"  onclick="askAction(${o.rowIndex},'cancel')">❌ Anulează</button>
-        <button class="btn-edit"    onclick="openEdit(${o.rowIndex})">✏️ Editează</button>
+        <button class="btn-edit"    onclick="openEditModal(${o.rowIndex})">✏️</button>
       </div>` : '—';
 
-    return `<tr>
-      <td style="color:var(--muted);font-size:.8rem">${o.data}</td>
+    return `<tr onclick="openDetails(${o.rowIndex})">
+      <td style="color:var(--muted);font-size:.8rem;white-space:nowrap">${o.data}</td>
       <td><strong>${o.nume}</strong><br><span style="color:var(--muted);font-size:.8rem">${o.telefon}</span></td>
-      <td style="font-size:.85rem;max-width:180px">${o.produse}</td>
-      <td style="font-size:.85rem">${o.livrare}<br><span style="color:var(--muted);font-size:.78rem">${o.localitate}</span></td>
-      <td>${badge}</td>
-      <td>${actions}</td>
+      <td style="font-size:.85rem;max-width:200px">${o.produse}</td>
+      <td style="font-size:.85rem;white-space:nowrap">${o.livrare}</td>
+      <td>${badge(o.status)}</td>
+      <td class="actions-cell">${actions}</td>
     </tr>`;
   }).join('');
 
@@ -335,12 +455,44 @@ function renderTable() {
     </table>`;
 }
 
+/* ── DETAILS MODAL ── */
+function openDetails(rowIndex) {
+  const o = allOrders.find(o => o.rowIndex === rowIndex);
+  if (!o) return;
+
+  document.getElementById('dTitle').textContent   = `Comanda #${o.id || o.rowIndex}`;
+  document.getElementById('dBadge').innerHTML     = badge(o.status);
+  document.getElementById('dProduse').textContent = o.produse;
+  document.getElementById('dNume').textContent    = o.nume;
+  document.getElementById('dTelefon').textContent = o.telefon;
+  document.getElementById('dEmail').textContent   = o.email || '—';
+  document.getElementById('dData').textContent    = o.data;
+  document.getElementById('dLivrare').textContent = o.livrare;
+  document.getElementById('dSursa').textContent   = o.sursa || 'Website';
+  document.getElementById('dAdresa').textContent  = `${o.localitate}, ${o.adresa}`;
+
+  const actEl = document.getElementById('dActions');
+  if (o.status === 'Nou') {
+    actEl.innerHTML = `
+      <button class="btn-confirm" onclick="closeDetails();askAction(${o.rowIndex},'confirm')">✅ Confirmă comanda</button>
+      <button class="btn-cancel"  onclick="closeDetails();askAction(${o.rowIndex},'cancel')">❌ Anulează comanda</button>
+      <button class="btn-edit"    onclick="closeDetails();openEditModal(${o.rowIndex})">✏️ Editează</button>`;
+  } else {
+    actEl.innerHTML = '';
+  }
+
+  document.getElementById('detailsModal').classList.add('open');
+}
+
+function closeDetails() {
+  document.getElementById('detailsModal').classList.remove('open');
+}
+
 /* ── CONFIRM MODAL ── */
 function askAction(rowIndex, action) {
   const order = allOrders.find(o => o.rowIndex === rowIndex);
   if (!order) return;
   pendingAction = { rowIndex, action, order };
-
   const isConfirm = action === 'confirm';
   document.getElementById('confirmIcon').textContent  = isConfirm ? '✅' : '❌';
   document.getElementById('confirmTitle').textContent = isConfirm ? 'Confirmi comanda?' : 'Anulezi comanda?';
@@ -363,22 +515,22 @@ async function executeAction() {
 }
 
 /* ── EDIT MODAL ── */
-function openEdit(rowIndex) {
+function openEditModal(rowIndex) {
   const o = allOrders.find(o => o.rowIndex === rowIndex);
   if (!o) return;
-  document.getElementById('eNume').value      = o.nume;
-  document.getElementById('eTelefon').value   = o.telefon;
-  document.getElementById('eEmail').value     = o.email;
-  document.getElementById('eProduse').value   = o.produse;
-  document.getElementById('eLivrare').value   = o.livrare;
-  document.getElementById('eLocalitate').value= o.localitate;
-  document.getElementById('eAdresa').value    = o.adresa;
-  document.getElementById('eNota').value      = '';
+  document.getElementById('eNume').value       = o.nume;
+  document.getElementById('eTelefon').value    = o.telefon;
+  document.getElementById('eEmail').value      = o.email;
+  document.getElementById('eProduse').value    = o.produse;
+  document.getElementById('eLivrare').value    = o.livrare;
+  document.getElementById('eLocalitate').value = o.localitate;
+  document.getElementById('eAdresa').value     = o.adresa;
+  document.getElementById('eNota').value       = '';
   document.getElementById('editModal').dataset.rowIndex = rowIndex;
   document.getElementById('editModal').classList.add('open');
 }
 
-function closeModal() {
+function closeEditModal() {
   document.getElementById('editModal').classList.remove('open');
 }
 
@@ -386,7 +538,6 @@ async function saveEdit() {
   const rowIndex = +document.getElementById('editModal').dataset.rowIndex;
   const order    = allOrders.find(o => o.rowIndex === rowIndex);
   if (!order) return;
-
   const updated = {
     ...order,
     produse:    document.getElementById('eProduse').value,
@@ -395,7 +546,7 @@ async function saveEdit() {
     adresa:     document.getElementById('eAdresa').value,
   };
   const nota = document.getElementById('eNota').value.trim();
-  closeModal();
+  closeEditModal();
   await sendAction(rowIndex, 'edit', updated, nota);
 }
 
@@ -403,45 +554,44 @@ async function saveEdit() {
 async function sendAction(rowIndex, action, order, nota) {
   try {
     const res  = await fetch('/api/admin-action', {
-      method:  'POST',
-      headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ rowIndex, action, order, nota }),
+      method:'POST',
+      headers:{ 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rowIndex, action, order, nota }),
     });
     const data = await res.json();
     if (!res.ok) { showToast('Eroare: ' + (data.error || ''), 'error'); return; }
 
-    const msg = action === 'confirm' ? '✅ Comandă confirmată — email trimis!'
-              : action === 'cancel'  ? '❌ Comandă anulată — email trimis!'
-              :                        '✏️ Comanda a fost actualizată!';
-    showToast(msg, action === 'confirm' ? 'success' : action === 'cancel' ? 'error' : '');
+    const msg = action==='confirm' ? '✅ Comandă confirmată — email trimis!'
+              : action==='cancel'  ? '❌ Comandă anulată — email trimis!'
+              :                      '✏️ Comanda a fost actualizată!';
+    showToast(msg, action==='confirm' ? 'success' : action==='cancel' ? 'error' : '');
 
-    // Update local state
     const idx = allOrders.findIndex(o => o.rowIndex === rowIndex);
     if (idx !== -1) {
-      if (action === 'edit') { allOrders[idx] = { ...allOrders[idx], ...order }; }
-      else { allOrders[idx].status = action === 'confirm' ? 'Confirmat' : 'Anulat'; }
+      if (action === 'edit') allOrders[idx] = { ...allOrders[idx], ...order };
+      else allOrders[idx].status = action==='confirm' ? 'Confirmat' : 'Anulat';
     }
     renderStats();
     renderTable();
-  } catch (e) {
-    showToast('Eroare de conexiune', 'error');
-  }
+  } catch(e) { showToast('Eroare de conexiune', 'error'); }
 }
 
 /* ── TOAST ── */
-function showToast(msg, type = '') {
+function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className   = 'show ' + type;
   setTimeout(() => { t.className = ''; }, 3500);
 }
 
+/* ── CLOSE ON BACKDROP ── */
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
 /* ── INIT ── */
-if (TOKEN) {
-  showDashboard();
-} else {
-  document.getElementById('loginScreen').style.display = 'flex';
-}
+if (TOKEN) showDashboard();
+else document.getElementById('loginScreen').style.display = 'flex';
 </script>
 </body>
 </html>
