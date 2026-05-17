@@ -1451,6 +1451,15 @@
 
   let PRODUCTS = [];
 
+  function cleanName(str) {
+    if (!str) return '';
+    return str
+      .replace(/\s+m[aă]rimi?\s+d[iî]?s?ponibil\S*\s*:?.*/gi, '')
+      .replace(/\s+[Pp]roducator\s+.*/g, '')
+      .replace(/\s+[Pp]ret\s*:?\s*\d+.*/g, '')
+      .trim();
+  }
+
   function mapCategorie(categorie) {
     const c = (categorie || '').toLowerCase();
     let tip = 'costum';
@@ -1506,7 +1515,7 @@
         const { tip, gen: genInferred } = mapCategorie(p.categorie);
         return {
           cod:      p.cod,
-          name:     p.nume,
+          name:     cleanName(p.nume),
           gen:      p.gen || genInferred,
           tip,
           marimi:   parseMarimi(p.marimi),
