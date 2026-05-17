@@ -211,6 +211,7 @@
       <div class="detail-item"><label>Data</label><span id="dData"></span></div>
       <div class="detail-item"><label>Livrare</label><span id="dLivrare"></span></div>
       <div class="detail-item"><label>Sursă</label><span id="dSursa"></span></div>
+      <div class="detail-item" id="dSumaWrap" style="display:none"><label>💰 Suma comenzii</label><span id="dSuma" style="color:var(--plum);font-weight:600"></span></div>
       <div class="detail-item" style="grid-column:1/-1"><label>Adresă</label><span id="dAdresa"></span></div>
     </div>
     <div class="detail-actions" id="dActions"></div>
@@ -255,9 +256,13 @@
       <label>Adresă</label>
       <input type="text" id="eAdresa"/>
     </div>
+    <div class="modal-field">
+      <label>Suma comenzii (MDL)</label>
+      <input type="number" id="eSuma" placeholder="ex: 450" min="0"/>
+    </div>
     <div class="nota-section">
       <p>📝 Notă pentru client (opțional — apare în emailul de confirmare)</p>
-      <textarea id="eNota" placeholder="ex: Comanda va fi expediată mâine. Prețul total: 450 MDL." rows="2"></textarea>
+      <textarea id="eNota" placeholder="ex: Comanda va fi expediată mâine." rows="2"></textarea>
     </div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeEditModal()">Anulează</button>
@@ -268,11 +273,14 @@
 
 <!-- CONFIRM MODAL -->
 <div class="modal-overlay" id="confirmModal">
-  <div class="modal" style="max-width:360px;text-align:center">
-    <p style="font-size:2rem;margin-bottom:.5rem" id="confirmIcon">✅</p>
-    <h2 id="confirmTitle" style="margin-bottom:1rem">Confirmi acțiunea?</h2>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:1.5rem" id="confirmText"></p>
-    <div class="modal-actions" style="justify-content:center">
+  <div class="modal" style="max-width:400px">
+    <div style="text-align:center;margin-bottom:1.2rem">
+      <p style="font-size:2rem;margin-bottom:.3rem" id="confirmIcon">✅</p>
+      <h2 id="confirmTitle">Confirmi acțiunea?</h2>
+      <p style="color:var(--muted);font-size:.88rem;margin-top:.4rem" id="confirmText"></p>
+    </div>
+    <div id="confirmExtraFields"></div>
+    <div class="modal-actions" style="justify-content:center;margin-top:1rem">
       <button class="btn-secondary" onclick="closeConfirmModal()">Nu</button>
       <button class="btn-save" id="confirmBtn" onclick="executeAction()">Da, confirmă</button>
     </div>
@@ -470,6 +478,13 @@ function openDetails(rowIndex) {
   document.getElementById('dLivrare').textContent = o.livrare;
   document.getElementById('dSursa').textContent   = o.sursa || 'Website';
   document.getElementById('dAdresa').textContent  = `${o.localitate}, ${o.adresa}`;
+  const sumaWrap = document.getElementById('dSumaWrap');
+  if (o.suma) {
+    document.getElementById('dSuma').textContent = o.suma + ' MDL';
+    sumaWrap.style.display = 'block';
+  } else {
+    sumaWrap.style.display = 'none';
+  }
 
   const actEl = document.getElementById('dActions');
   if (o.status === 'Nou') {
@@ -499,6 +514,15 @@ function askAction(rowIndex, action) {
   document.getElementById('confirmText').textContent  = `${order.nume} — ${order.produse}`;
   document.getElementById('confirmBtn').textContent   = isConfirm ? 'Da, confirmă' : 'Da, anulează';
   document.getElementById('confirmBtn').style.background = isConfirm ? '#0f5132' : '#842029';
+  document.getElementById('confirmExtraFields').innerHTML = isConfirm ? `
+    <div class="modal-field">
+      <label>💰 Suma comenzii (MDL)</label>
+      <input type="number" id="cSuma" placeholder="ex: 450" min="0" style="width:100%;padding:.65rem .9rem;border:1.5px solid #e5d8c4;border-radius:7px;font-size:.9rem;background:#faf6f0;outline:none"/>
+    </div>
+    <div class="modal-field">
+      <label>📝 Notă pentru client (opțional)</label>
+      <textarea id="cNota" placeholder="ex: Comanda va fi expediată mâine." rows="2" style="width:100%;padding:.65rem .9rem;border:1.5px solid #e5d8c4;border-radius:7px;font-size:.9rem;background:#faf6f0;outline:none;font-family:inherit;resize:vertical"></textarea>
+    </div>` : '';
   document.getElementById('confirmModal').classList.add('open');
 }
 
@@ -510,8 +534,10 @@ function closeConfirmModal() {
 async function executeAction() {
   if (!pendingAction) return;
   const { rowIndex, action, order } = pendingAction;
+  const suma = action === 'confirm' ? (document.getElementById('cSuma')?.value?.trim() || '') : '';
+  const nota = action === 'confirm' ? (document.getElementById('cNota')?.value?.trim() || '') : '';
   closeConfirmModal();
-  await sendAction(rowIndex, action, order, '');
+  await sendAction(rowIndex, action, order, nota, suma);
 }
 
 /* ── EDIT MODAL ── */
@@ -525,6 +551,7 @@ function openEditModal(rowIndex) {
   document.getElementById('eLivrare').value    = o.livrare;
   document.getElementById('eLocalitate').value = o.localitate;
   document.getElementById('eAdresa').value     = o.adresa;
+  document.getElementById('eSuma').value       = o.suma || '';
   document.getElementById('eNota').value       = '';
   document.getElementById('editModal').dataset.rowIndex = rowIndex;
   document.getElementById('editModal').classList.add('open');
@@ -546,17 +573,18 @@ async function saveEdit() {
     adresa:     document.getElementById('eAdresa').value,
   };
   const nota = document.getElementById('eNota').value.trim();
+  const suma = document.getElementById('eSuma').value.trim();
   closeEditModal();
-  await sendAction(rowIndex, 'edit', updated, nota);
+  await sendAction(rowIndex, 'edit', updated, nota, suma);
 }
 
 /* ── SEND ACTION ── */
-async function sendAction(rowIndex, action, order, nota) {
+async function sendAction(rowIndex, action, order, nota, suma) {
   try {
     const res  = await fetch('/api/admin-action', {
       method:'POST',
       headers:{ 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rowIndex, action, order, nota }),
+      body: JSON.stringify({ rowIndex, action, order, nota, suma }),
     });
     const data = await res.json();
     if (!res.ok) { showToast('Eroare: ' + (data.error || ''), 'error'); return; }
@@ -568,8 +596,8 @@ async function sendAction(rowIndex, action, order, nota) {
 
     const idx = allOrders.findIndex(o => o.rowIndex === rowIndex);
     if (idx !== -1) {
-      if (action === 'edit') allOrders[idx] = { ...allOrders[idx], ...order };
-      else allOrders[idx].status = action==='confirm' ? 'Confirmat' : 'Anulat';
+      if (action === 'edit') allOrders[idx] = { ...allOrders[idx], ...order, suma: suma || allOrders[idx].suma };
+      else { allOrders[idx].status = action==='confirm' ? 'Confirmat' : 'Anulat'; if (suma) allOrders[idx].suma = suma; }
     }
     renderStats();
     renderTable();

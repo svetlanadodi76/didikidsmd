@@ -25,13 +25,13 @@ module.exports = async function handler(req, res) {
 
     const resp = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: 'Comenzi!A:K',
+      range: 'Comenzi!A:L',
     });
 
     const rows = resp.data.values || [];
     const orders = rows
       .map((row, i) => ({
-        rowIndex: i + 1,
+        rowIndex:  i + 1,
         id:        row[0] || '',
         data:      row[1] || '',
         nume:      row[2] || '',
@@ -43,6 +43,7 @@ module.exports = async function handler(req, res) {
         adresa:    row[8] || '',
         status:    row[9] || '',
         sursa:     row[10] || '',
+        suma:      row[11] || '',
       }))
       .filter(o => o.nume && o.telefon);
 

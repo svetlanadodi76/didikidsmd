@@ -20,7 +20,7 @@ async function getSheets() {
   return google.sheets({ version: 'v4', auth });
 }
 
-function confirmHtml(order, nota) {
+function confirmHtml(order, nota, suma) {
   return `
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#3a1f2d;background:#faf6f0;">
       <div style="background:#5c2d4a;padding:2rem;text-align:center;">
@@ -43,6 +43,10 @@ function confirmHtml(order, nota) {
             <td style="padding:0.6rem 0;color:#7a5566;">📍 Adresă</td>
             <td style="padding:0.6rem 0;font-weight:600;">${order.localitate}, ${order.adresa}</td>
           </tr>
+          ${suma ? `<tr style="border-bottom:1px solid #e5d8c4;">
+            <td style="padding:0.6rem 0;color:#7a5566;">💰 Suma de plată</td>
+            <td style="padding:0.6rem 0;font-weight:600;color:#5c2d4a;">${suma} MDL</td>
+          </tr>` : ''}
           <tr>
             <td style="padding:0.6rem 0;color:#7a5566;">📞 Telefon</td>
             <td style="padding:0.6rem 0;font-weight:600;">${order.telefon}</td>
@@ -80,7 +84,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   if (!verifyToken(req)) return res.status(401).json({ error: 'Neautorizat' });
 
-  const { rowIndex, action, order, nota } = req.body || {};
+  const { rowIndex, action, order, nota, suma } = req.body || {};
   if (!rowIndex || !action || !order) return res.status(400).json({ error: 'Date incomplete' });
 
   const results = {};
@@ -92,17 +96,17 @@ module.exports = async function handler(req, res) {
     if (action === 'edit') {
       await sheets.spreadsheets.values.update({
         spreadsheetId:    process.env.GOOGLE_SHEET_ID,
-        range:            `Comenzi!F${rowIndex}:I${rowIndex}`,
+        range:            `Comenzi!F${rowIndex}:L${rowIndex}`,
         valueInputOption: 'USER_ENTERED',
-        resource: { values: [[order.produse, order.livrare, order.localitate, order.adresa]] },
+        resource: { values: [[order.produse, order.livrare, order.localitate, order.adresa, order.status, order.sursa, suma || '']] },
       });
     } else {
       const newStatus = action === 'confirm' ? 'Confirmat' : 'Anulat';
       await sheets.spreadsheets.values.update({
         spreadsheetId:    process.env.GOOGLE_SHEET_ID,
-        range:            `Comenzi!J${rowIndex}`,
+        range:            `Comenzi!J${rowIndex}:L${rowIndex}`,
         valueInputOption: 'USER_ENTERED',
-        resource: { values: [[newStatus]] },
+        resource: { values: [[newStatus, order.sursa || 'Website', suma || '']] },
       });
     }
     results.sheets = 'ok';
@@ -117,7 +121,7 @@ module.exports = async function handler(req, res) {
       const subject = action === 'confirm'
         ? '✅ Comanda ta la DiDiKidsMD — confirmată!'
         : '❌ Comanda ta la DiDiKidsMD — anulată';
-      const html = action === 'confirm' ? confirmHtml(order, nota) : cancelHtml(order);
+      const html = action === 'confirm' ? confirmHtml(order, nota, suma) : cancelHtml(order);
 
       const emailRes = await fetch('https://api.resend.com/emails', {
         method:  'POST',
