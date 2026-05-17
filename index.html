@@ -1945,7 +1945,8 @@
     const form   = document.getElementById('orderForm');
     const btn    = document.getElementById('submitOrderBtn');
     const data   = Object.fromEntries(new FormData(form));
-    data.produse = cart.map(i => `${i.cod} x${i.qty} (mări.${i.size})`).join(', ');
+    data.produse = cart.map(i => `${i.cod} ${i.name} x${i.qty} (mări.${i.size})`).join(', ');
+    data.cart    = cart;
 
     btn.disabled    = true;
     btn.textContent = 'Se trimite...';

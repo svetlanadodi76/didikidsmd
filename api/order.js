@@ -3,12 +3,13 @@ const { google } = require('googleapis');
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { nume, telefon, email, livrare, localitate, adresa, produse, nota_client } = req.body || {};
+  const { nume, telefon, email, livrare, localitate, adresa, produse, nota_client, cart } = req.body || {};
 
   if (!nume || !telefon || !email || !livrare || !localitate || !adresa || !produse) {
     return res.status(400).json({ error: 'Date incomplete' });
   }
 
+  const cartItems = Array.isArray(cart) && cart.length > 0 ? cart : null;
   const order = { nume, telefon, email, livrare, localitate, adresa, produse, nota_client: nota_client || '' };
   const results = {};
 
@@ -27,10 +28,11 @@ module.exports = async function handler(req, res) {
     });
     const sheets = google.sheets({ version: 'v4', auth });
     const now = new Date().toLocaleDateString('ro-MD');
+    const sid = process.env.GOOGLE_SHEET_ID;
 
     // Găsim ultimul rând cu date reale în coloana C
     const colC = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      spreadsheetId: sid,
       range: 'Comenzi!C:C',
     });
     const cRows = colC.data.values || [];
@@ -43,35 +45,41 @@ module.exports = async function handler(req, res) {
     }
     const nextRow = lastDataRow + 1;
 
+    const makeRow = (item, isFirst) => [
+      '',                                          // A: Nr (formula)
+      isFirst ? now : '',                          // B: Data (doar pe primul rând)
+      order.nume,                                  // C: Client
+      order.telefon,                               // D: Telefon
+      `${order.localitate}, ${order.adresa}`,      // E: Adresa
+      item ? item.cod : order.produse,             // F: Cod Produs
+      item ? `${item.name} - mări. ${item.size}` : '', // G: Descriere
+      item ? String(item.qty) : '1',               // H: Cantitate
+      item && item.pret ? item.pret : '',          // I: Preț/buc
+      '',                                          // J: Cost/buc
+      item && item.pret ? String(Number(item.pret) * item.qty) : '', // K: Total Vânzare
+      '',                                          // L: Total Cost
+      order.livrare,                               // M: Metodă Livrare
+      '',                                          // N: Cost Livrare
+      '',                                          // O: AWB
+      'Nou',                                       // P: Status
+      '',                                          // Q: Profit
+      isFirst ? order.email : '',                  // R: Email (doar pe primul rând)
+      isFirst ? 'Website' : '',                    // S: Sursă (doar pe primul rând)
+      isFirst ? order.nota_client : '',            // T: Nota client (doar pe primul rând)
+    ];
+
+    const rows = cartItems
+      ? cartItems.map((item, i) => makeRow(item, i === 0))
+      : [makeRow(null, true)];
+
     await sheets.spreadsheets.values.update({
-      spreadsheetId:    process.env.GOOGLE_SHEET_ID,
-      range:            `Comenzi!A${nextRow}:T${nextRow}`,
+      spreadsheetId:    sid,
+      range:            `Comenzi!A${nextRow}:T${nextRow + rows.length - 1}`,
       valueInputOption: 'USER_ENTERED',
-      resource: { values: [[
-        '',                                        // A: Nr (formula)
-        now,                                       // B: Data
-        order.nume,                                // C: Client
-        order.telefon,                             // D: Telefon
-        `${order.localitate}, ${order.adresa}`,    // E: Adresa
-        order.produse,                             // F: Cod Produs
-        '',                                        // G: Descriere Produs
-        '1',                                       // H: Cantitate
-        '',                                        // I: Preț/buc
-        '',                                        // J: Cost/buc
-        '',                                        // K: Total Vânzare
-        '',                                        // L: Total Cost
-        order.livrare,                             // M: Metodă Livrare
-        '',                                        // N: Cost Livrare
-        '',                                        // O: AWB
-        'Nou',                                     // P: Status
-        '',                                        // Q: Profit
-        order.email,                               // R: Email
-        'Website',                                 // S: Sursă
-        order.nota_client,                         // T: Nota client
-      ]] },
+      resource:         { values: rows },
     });
     results.sheets = 'ok';
-    console.log('Sheets: ok, row', nextRow);
+    console.log('Sheets: ok, rows', nextRow, '-', nextRow + rows.length - 1);
   } catch (e) {
     results.sheets = e.message;
     console.log('Sheets ERROR:', e.message);
