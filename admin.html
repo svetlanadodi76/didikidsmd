@@ -522,7 +522,7 @@ function askAction(rowIndex, action) {
   const isPosta = livrare.includes('Moldovei') || livrare.toLowerCase().includes('posta');
   const bst = 'padding:.3rem .7rem;background:var(--soft);border:1px solid var(--gold);border-radius:12px;font-size:.75rem;color:var(--plum);cursor:pointer';
   const notaBtns = isPosta
-    ? `<button type="button" style="${bst}" onclick="insertNota('La primirea notificarii prin sms la telefon, va rugam sa va apropiati la oficiul postal pentru ridicarea coletului dvs. O zi frumoasa sa aveti!')">📬 Ridicare oficiu poștal</button>
+    ? `<button type="button" style="${bst}" onclick="insertNota('Comanda va fi expediata miine prin Posta Moldovei, la primirea notificarii prin sms la telefon, va rugam sa va apropiati la oficiul postal pentru ridicarea coletului dvs. O zi frumoasa sa aveti!')">📬 Ridicare oficiu poștal</button>
        <button type="button" style="${bst}" onclick="insertNota('Comanda este confirmata. Coletul va fi expediat prin Posta Moldovei in cel mai scurt timp.')">📦 Expediere Poșta</button>`
     : `<button type="button" style="${bst}" onclick="insertNota('Comanda va fi expediata maine prin curier. Va rugam sa fiti disponibil/a la telefon pentru preluarea coletului.')">📦 Expediere mâine</button>
        <button type="button" style="${bst}" onclick="insertNota('Comanda va fi expediata azi prin curier. Va rugam sa fiti disponibil/a la telefon.')">⚡ Expediere azi</button>
