@@ -1466,15 +1466,35 @@
   function parseMarimi(str) {
     if (!str) return [];
     const s = str.trim();
-    const rangeMatch = s.replace(/\s*cm\s*/gi, '').trim().match(/^(\d+)-(\d+)$/);
-    if (rangeMatch) {
-      const start = parseInt(rangeMatch[1]);
-      const end   = parseInt(rangeMatch[2]);
-      const sizes = [];
-      for (let v = start; v <= end; v += 10) sizes.push(String(v));
-      return sizes;
+
+    // Comma-separated: "100,110,120" or "2,3,4,5 ani"
+    if (s.includes(',')) {
+      return s.split(',').map(x => x.trim()).filter(Boolean);
     }
-    return s.split(',').map(x => x.trim()).filter(Boolean);
+
+    const isAni = /ani/i.test(s);
+    const clean = s.replace(/\s*ani\s*/gi, '').replace(/\s*cm\s*/gi, '').trim();
+    const unit  = isAni ? ' ani' : '';
+
+    // Multiple dashes: "2-3-4-5" → individual values
+    const parts = clean.split('-').filter(p => p.trim());
+    if (parts.length > 2) {
+      return parts.map(p => p.trim() + unit);
+    }
+
+    // Single range: "90-130" (step 10) or "2-5 ani" (step 1)
+    if (parts.length === 2) {
+      const start = parseInt(parts[0]);
+      const end   = parseInt(parts[1]);
+      if (!isNaN(start) && !isNaN(end)) {
+        const step = isAni ? 1 : 10;
+        const sizes = [];
+        for (let v = start; v <= end; v += step) sizes.push(String(v) + unit);
+        return sizes;
+      }
+    }
+
+    return [s];
   }
 
   async function loadProducts() {
@@ -1602,7 +1622,6 @@
     document.getElementById('modalDetails').innerHTML = `
       <p class="modal-cod">${p.cod}</p>
       <h2 class="modal-name">${p.name}</h2>
-      ${p.descriere ? `<p class="modal-descriere">${p.descriere}</p>` : ''}
       <p class="modal-price">${p.pret ? p.pret + ' MDL' : '— MDL'}</p>
       <div>
         <p class="modal-sizes-title">Mărimi disponibile</p>
