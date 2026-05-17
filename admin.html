@@ -125,9 +125,27 @@
   .spinner{width:32px;height:32px;border:3px solid #e5d8c4;border-top-color:var(--plum);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
   @keyframes spin{to{transform:rotate(360deg)}}
 
+  /* NAV TABS */
+  .nav-tabs-bar{background:var(--plum);padding:0 2rem;display:flex;gap:.25rem}
+  .nav-tab{padding:.6rem 1.4rem;border:none;background:transparent;color:rgba(201,169,110,.6);cursor:pointer;font-size:.9rem;font-family:inherit;border-bottom:2px solid transparent;transition:all .2s}
+  .nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .nav-tab:hover:not(.active){color:var(--gold)}
+
+  /* CATALOG */
+  .catalog-toolbar{display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+  .btn-add{padding:.55rem 1.2rem;background:var(--plum);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:.88rem;transition:opacity .2s;white-space:nowrap}
+  .btn-add:hover{opacity:.88}
+  .prod-img{width:52px;height:52px;object-fit:cover;border-radius:8px}
+  .prod-img-placeholder{width:52px;height:52px;border-radius:8px;background:#f0e8d8;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+  .badge-activ{background:#d1e7dd;color:#0f5132}
+  .badge-epuizat{background:#fff3cd;color:#856404}
+  .badge-ascuns{background:#f0e8d8;color:#7a5566}
+  .modal-field small{display:block;color:var(--muted);font-size:.75rem;margin-top:.25rem}
+
   @media(max-width:640px){
     .dashboard-body{padding:1rem}
     header{padding:.8rem 1rem}
+    .nav-tabs-bar{padding:0 1rem}
     .stats{gap:.6rem}
     .detail-grid{grid-template-columns:1fr}
     .toolbar{gap:.5rem}
@@ -166,7 +184,12 @@
       <button class="logout-btn" onclick="doLogout()">Ieșire</button>
     </div>
   </header>
-  <div class="dashboard-body">
+  <div class="nav-tabs-bar">
+    <button class="nav-tab active" data-section="orders" onclick="showSection('orders')">📋 Comenzi</button>
+    <button class="nav-tab" data-section="catalog" onclick="showSection('catalog')">🛍 Catalog</button>
+  </div>
+
+  <div id="ordersSection" class="dashboard-body">
     <div class="stats" id="stats"></div>
 
     <!-- Toolbar: search + period -->
@@ -190,8 +213,37 @@
     <div class="table-wrap" id="tableWrap">
       <div class="loading"><div class="spinner"></div>Se încarcă comenzile...</div>
     </div>
-  </div>
-</div>
+  </div><!-- /ordersSection -->
+
+  <!-- CATALOG SECTION -->
+  <div id="catalogSection" class="dashboard-body" style="display:none">
+    <div class="catalog-toolbar">
+      <div class="search-wrap" style="flex:1;min-width:180px">
+        <input type="text" id="catalogSearch" placeholder="Caută după cod sau nume..." oninput="renderCatalog()"/>
+      </div>
+      <select class="period-select" id="catalogStatusFilter" onchange="renderCatalog()">
+        <option value="">Toate statusurile</option>
+        <option value="Activ">✅ Activ</option>
+        <option value="Epuizat">⚠️ Epuizat</option>
+        <option value="Ascuns">🚫 Ascuns</option>
+      </select>
+      <select class="period-select" id="catalogCatFilter" onchange="renderCatalog()">
+        <option value="">Toate categoriile</option>
+        <option value="Rochii">Rochii</option>
+        <option value="Costume">Costume</option>
+        <option value="Pantaloni">Pantaloni</option>
+        <option value="Bluze">Bluze</option>
+        <option value="Seturi">Seturi</option>
+        <option value="Altele">Altele</option>
+      </select>
+      <button class="btn-add" onclick="openProductModal(null)">+ Adaugă produs</button>
+    </div>
+    <div class="table-wrap" id="catalogWrap">
+      <div class="loading"><div class="spinner"></div>Se încarcă catalogul...</div>
+    </div>
+  </div><!-- /catalogSection -->
+
+</div><!-- /dashboard -->
 
 <!-- DETAILS MODAL -->
 <div class="modal-overlay" id="detailsModal">
@@ -284,6 +336,58 @@
     <div class="modal-actions" style="justify-content:center;margin-top:1rem">
       <button class="btn-secondary" onclick="closeConfirmModal()">Nu</button>
       <button class="btn-save" id="confirmBtn" onclick="executeAction()">Da, confirmă</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal" style="max-width:480px">
+    <h2 id="productModalTitle">Adaugă produs</h2>
+    <div class="modal-field">
+      <label>Cod produs *</label>
+      <input type="text" id="pCod" placeholder="ex: CH010"/>
+    </div>
+    <div class="modal-field">
+      <label>Nume produs *</label>
+      <input type="text" id="pNume" placeholder="ex: Rochie cu jachet din jeans"/>
+    </div>
+    <div class="modal-field">
+      <label>Preț (MDL) *</label>
+      <input type="number" id="pPret" placeholder="ex: 590" min="0"/>
+    </div>
+    <div class="modal-field">
+      <label>Mărimi disponibile</label>
+      <input type="text" id="pMarimi" placeholder="ex: 100,110,120 sau 2,3,4,5 ani"/>
+      <small>Separă cu virgulă. Lasă gol dacă nu se aplică.</small>
+    </div>
+    <div class="modal-field">
+      <label>Categorie</label>
+      <select id="pCategorie">
+        <option value="Rochii">Rochii</option>
+        <option value="Costume">Costume</option>
+        <option value="Pantaloni">Pantaloni</option>
+        <option value="Bluze">Bluze</option>
+        <option value="Seturi">Seturi</option>
+        <option value="Altele">Altele</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Imagine (cale fișier)</label>
+      <input type="text" id="pImagine" placeholder="ex: /images/CH010.jpg"/>
+      <small>Încarcă imaginea în folderul /images/ din proiect, apoi scrie calea.</small>
+    </div>
+    <div class="modal-field">
+      <label>Status</label>
+      <select id="pStatus">
+        <option value="Activ">✅ Activ — apare pe site</option>
+        <option value="Epuizat">⚠️ Epuizat — apare cu badge</option>
+        <option value="Ascuns">🚫 Ascuns — nu apare pe site</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeProductModal()">Anulează</button>
+      <button class="btn-save" onclick="saveProduct()">Salvează</button>
     </div>
   </div>
 </div>
@@ -548,6 +652,12 @@ function closeConfirmModal() {
 
 async function executeAction() {
   if (!pendingAction) return;
+  if (pendingAction.type === 'deleteProduct') {
+    const { rowIndex } = pendingAction;
+    closeConfirmModal();
+    await deleteProduct(rowIndex);
+    return;
+  }
   const { rowIndex, action, order } = pendingAction;
   const suma = action === 'confirm' ? (document.getElementById('cSuma')?.value?.trim() || '') : '';
   const nota = action === 'confirm' ? (document.getElementById('cNota')?.value?.trim() || '') : '';
@@ -640,6 +750,169 @@ function showToast(msg, type='') {
   t.textContent = msg;
   t.className   = 'show ' + type;
   setTimeout(() => { t.className = ''; }, 3500);
+}
+
+/* ── SECTIONS NAV ── */
+function showSection(name) {
+  document.getElementById('ordersSection').style.display  = name === 'orders'  ? 'block' : 'none';
+  document.getElementById('catalogSection').style.display = name === 'catalog' ? 'block' : 'none';
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.section === name));
+  if (name === 'catalog' && catalogProducts.length === 0) loadCatalog();
+}
+
+/* ── CATALOG ── */
+let catalogProducts = [];
+let editingProductRow = null;
+
+async function loadCatalog() {
+  document.getElementById('catalogWrap').innerHTML = '<div class="loading"><div class="spinner"></div>Se încarcă catalogul...</div>';
+  try {
+    const res  = await fetch('/api/catalog', { headers: { 'Authorization': `Bearer ${TOKEN}` } });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json();
+    catalogProducts = data.products || [];
+    renderCatalog();
+  } catch(e) {
+    document.getElementById('catalogWrap').innerHTML = '<div class="empty">Eroare la încărcarea catalogului.</div>';
+  }
+}
+
+function renderCatalog() {
+  const search  = (document.getElementById('catalogSearch')?.value || '').trim().toLowerCase();
+  const statusF = document.getElementById('catalogStatusFilter')?.value || '';
+  const catF    = document.getElementById('catalogCatFilter')?.value || '';
+
+  const filtered = catalogProducts.filter(p => {
+    if (statusF && p.status !== statusF) return false;
+    if (catF && p.categorie !== catF) return false;
+    if (search && !p.cod.toLowerCase().includes(search) && !(p.nume||'').toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    document.getElementById('catalogWrap').innerHTML = '<div class="empty">Niciun produs găsit.</div>';
+    return;
+  }
+
+  const statusBadge = s => ({
+    'Activ':   '<span class="badge badge-activ">Activ</span>',
+    'Epuizat': '<span class="badge badge-epuizat">Epuizat</span>',
+    'Ascuns':  '<span class="badge badge-ascuns">Ascuns</span>',
+  }[s] || `<span class="badge">${s}</span>`);
+
+  const rows = filtered.map(p => {
+    const img = p.imagine
+      ? `<img src="${p.imagine}" class="prod-img" onerror="this.parentNode.innerHTML='<div class=prod-img-placeholder>📦</div>'">`
+      : `<div class="prod-img-placeholder">📦</div>`;
+    return `<tr>
+      <td>${img}</td>
+      <td><strong style="font-size:.82rem;color:var(--muted)">${p.cod}</strong></td>
+      <td><strong>${p.nume||'—'}</strong><br><span style="font-size:.78rem;color:var(--muted)">${p.categorie||''}</span></td>
+      <td style="font-weight:600;color:var(--plum);white-space:nowrap">${p.pret ? p.pret+' MDL' : '—'}</td>
+      <td style="font-size:.82rem;max-width:160px;color:var(--muted)">${p.marimi||'—'}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td class="actions-cell">
+        <div class="actions" style="gap:.3rem">
+          <button class="btn-edit" onclick="openProductModal(${p.rowIndex})" style="padding:.3rem .65rem">✏️</button>
+          <button class="btn-cancel" onclick="confirmDeleteProduct(${p.rowIndex})" style="padding:.3rem .65rem;font-size:.8rem">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('catalogWrap').innerHTML = `
+    <table>
+      <thead><tr>
+        <th style="width:64px">Foto</th>
+        <th>Cod</th><th>Produs</th><th>Preț</th><th>Mărimi</th><th>Status</th><th>Acțiuni</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function openProductModal(rowIndex) {
+  editingProductRow = rowIndex;
+  const isEdit = rowIndex !== null;
+  document.getElementById('productModalTitle').textContent = isEdit ? '✏️ Editează produs' : '➕ Adaugă produs';
+
+  if (isEdit) {
+    const p = catalogProducts.find(p => p.rowIndex === rowIndex);
+    if (!p) return;
+    document.getElementById('pCod').value       = p.cod;
+    document.getElementById('pNume').value      = p.nume;
+    document.getElementById('pPret').value      = p.pret;
+    document.getElementById('pMarimi').value    = p.marimi;
+    document.getElementById('pCategorie').value = p.categorie || 'Altele';
+    document.getElementById('pImagine').value   = p.imagine;
+    document.getElementById('pStatus').value    = p.status || 'Activ';
+  } else {
+    ['pCod','pNume','pPret','pMarimi','pImagine'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('pCategorie').value = 'Rochii';
+    document.getElementById('pStatus').value    = 'Activ';
+  }
+  document.getElementById('productModal').classList.add('open');
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('open');
+  editingProductRow = null;
+}
+
+async function saveProduct() {
+  const product = {
+    cod:       document.getElementById('pCod').value.trim(),
+    nume:      document.getElementById('pNume').value.trim(),
+    pret:      document.getElementById('pPret').value.trim(),
+    marimi:    document.getElementById('pMarimi').value.trim(),
+    categorie: document.getElementById('pCategorie').value,
+    imagine:   document.getElementById('pImagine').value.trim(),
+    status:    document.getElementById('pStatus').value,
+  };
+  if (!product.cod || !product.nume || !product.pret) {
+    showToast('Cod, Nume și Preț sunt obligatorii', 'error'); return;
+  }
+  const isEdit = editingProductRow !== null;
+  closeProductModal();
+  try {
+    const res  = await fetch('/api/catalog-action', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: isEdit ? 'edit' : 'add', rowIndex: editingProductRow, product }),
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast('Eroare: ' + (data.error||''), 'error'); return; }
+    showToast(isEdit ? '✏️ Produs actualizat!' : '✅ Produs adăugat!', 'success');
+    catalogProducts = [];
+    await loadCatalog();
+  } catch(e) { showToast('Eroare de conexiune', 'error'); }
+}
+
+function confirmDeleteProduct(rowIndex) {
+  const p = catalogProducts.find(p => p.rowIndex === rowIndex);
+  if (!p) return;
+  pendingAction = { type: 'deleteProduct', rowIndex };
+  document.getElementById('confirmIcon').textContent  = '🗑';
+  document.getElementById('confirmTitle').textContent = 'Ștergi produsul?';
+  document.getElementById('confirmText').textContent  = `${p.cod} — ${p.nume||''}`;
+  document.getElementById('confirmBtn').textContent   = 'Da, șterge';
+  document.getElementById('confirmBtn').style.background = '#842029';
+  document.getElementById('confirmExtraFields').innerHTML = '';
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+async function deleteProduct(rowIndex) {
+  try {
+    const res  = await fetch('/api/catalog-action', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', rowIndex }),
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast('Eroare: ' + (data.error||''), 'error'); return; }
+    showToast('🗑 Produs șters!', '');
+    catalogProducts = [];
+    await loadCatalog();
+  } catch(e) { showToast('Eroare de conexiune', 'error'); }
 }
 
 /* ── CLOSE ON BACKDROP ── */
