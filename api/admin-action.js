@@ -88,17 +88,14 @@ module.exports = async function handler(req, res) {
   if (!rowIndex || !action || !order) return res.status(400).json({ error: 'Date incomplete' });
 
   const results = {};
+  const statusCol = order.statusCol || 'P'; // 'P' pentru comenzi noi, 'J' pentru comenzi vechi
 
-  /* 1 — Update Google Sheets
-     Structura CRM: E=Adresa F=Produse M=Livrare P=Status
-                    T=Nota client U=Suma V=Nota manager
-  */
+  /* 1 — Update Google Sheets */
   try {
     const sheets = await getSheets();
     const sid    = process.env.GOOGLE_SHEET_ID;
 
     if (action === 'edit') {
-      // Actualizăm doar celulele fără formule, evitând I J K L Q
       await sheets.spreadsheets.values.batchUpdate({
         spreadsheetId: sid,
         resource: {
@@ -119,7 +116,7 @@ module.exports = async function handler(req, res) {
         resource: {
           valueInputOption: 'USER_ENTERED',
           data: [
-            { range: `Comenzi!P${rowIndex}`, values: [[newStatus]] },
+            { range: `Comenzi!${statusCol}${rowIndex}`, values: [[newStatus]] },
             { range: `Comenzi!U${rowIndex}`, values: [[suma || '']] },
             { range: `Comenzi!V${rowIndex}`, values: [[nota || '']] },
           ],
@@ -147,9 +144,42 @@ module.exports = async function handler(req, res) {
       });
       const emailData = await emailRes.json();
       results.email = emailRes.ok ? 'ok' : emailData;
+      console.log('Email:', emailRes.status, JSON.stringify(emailData));
     } catch (e) {
       results.email = e.message;
       console.log('Email ERROR:', e.message);
+    }
+  }
+
+  /* 3 — Telegram notificare manager */
+  if (action === 'confirm' || action === 'cancel') {
+    try {
+      const icon = action === 'confirm' ? '✅' : '❌';
+      const statusText = action === 'confirm' ? 'CONFIRMATĂ' : 'ANULATĂ';
+      const text =
+        `${icon} *Comanda ${statusText}*\n\n` +
+        `👤 *Client:* ${order.nume}\n` +
+        `📞 *Telefon:* ${order.telefon}\n` +
+        `📦 *Produse:* ${order.produse}\n` +
+        `🚚 *Livrare:* ${order.livrare}\n` +
+        `📍 *Adresă:* ${order.adresa}` +
+        (suma ? `\n💰 *Suma:* ${suma} MDL` : '') +
+        (nota ? `\n📝 *Notă:* ${nota}` : '');
+
+      const tgRes = await fetch(
+        `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`,
+        {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ chat_id: process.env.OWNER_CHAT_ID, text, parse_mode: 'Markdown' }),
+        }
+      );
+      const tgData = await tgRes.json();
+      results.telegram = tgRes.ok ? 'ok' : tgData;
+      console.log('Telegram:', tgRes.status, JSON.stringify(tgData));
+    } catch (e) {
+      results.telegram = e.message;
+      console.log('Telegram ERROR:', e.message);
     }
   }
 

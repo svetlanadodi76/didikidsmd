@@ -23,15 +23,6 @@ module.exports = async function handler(req, res) {
     });
     const sheets = google.sheets({ version: 'v4', auth });
 
-    /* Structura CRM:
-       A(0)=Nr  B(1)=Data  C(2)=Client  D(3)=Telefon  E(4)=Adresa
-       F(5)=Cod Produs  G(6)=Descriere  H(7)=Cantitate
-       I(8)=Preț/buc  J(9)=Cost/buc  K(10)=Total Vânzare  L(11)=Total Cost
-       M(12)=Metodă Livrare  N(13)=Cost Livrare  O(14)=AWB
-       P(15)=Status  Q(16)=Profit
-       R(17)=Email  S(18)=Sursă  T(19)=Nota client
-       U(20)=Suma comenzii  V(21)=Nota manager
-    */
     const resp = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
       range: 'Comenzi!A:V',
@@ -39,23 +30,38 @@ module.exports = async function handler(req, res) {
 
     const rows = resp.data.values || [];
     const orders = rows
-      .map((row, i) => ({
-        rowIndex:    i + 1,
-        id:          row[0]  || '',
-        data:        row[1]  || '',
-        nume:        row[2]  || '',
-        telefon:     row[3]  || '',
-        adresa:      row[4]  || '',
-        produse:     row[5]  || '',
-        cantitate:   row[7]  || '',
-        pret:        row[8]  || '',
-        livrare:     row[12] || '',
-        status:      row[15] || '',
-        email:       row[17] || '',
-        sursa:       row[18] || '',
-        nota_client: row[19] || '',
-        suma:        row[20] || '',
-      }))
+      .map((row, i) => {
+        const col = (n) => String(row[n] || '').trim();
+
+        /* Detectăm formatul comenzii:
+           - Format NOU (website fix): E = adresă completă (nu conține @)
+           - Format VECHI (website pre-fix): E = email (conține @)
+           - Format BOT: E = adresă (nu conține @), P = status real
+        */
+        const eIsEmail = col(4).includes('@');
+        const isOldWebsite = eIsEmail;
+
+        return {
+          rowIndex:    i + 1,
+          id:          col(0),
+          data:        col(1),
+          nume:        col(2),
+          telefon:     col(3),
+          adresa:      isOldWebsite
+                         ? `${col(7)}, ${col(8)}`.replace(/^,\s*|,\s*$/, '')
+                         : col(4),
+          produse:     col(5),
+          livrare:     isOldWebsite ? col(6) : col(12),
+          status:      isOldWebsite ? col(9) : col(15),
+          email:       isOldWebsite ? col(4) : col(17),
+          sursa:       isOldWebsite ? col(10) : col(18),
+          nota_client: col(19),
+          suma:        col(20),
+          pret:        col(8),
+          // păstrăm indexul coloanei de status pentru update corect
+          statusCol:   isOldWebsite ? 'J' : 'P',
+        };
+      })
       .filter(o => o.nume && o.telefon && !['client', 'nr.', 'nr'].includes(o.nume.toLowerCase()));
 
     return res.status(200).json({ orders });
