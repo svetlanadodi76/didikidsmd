@@ -24,9 +24,25 @@ module.exports = async function handler(req, res) {
     });
     const sheets = google.sheets({ version: 'v4', auth });
     const now = new Date().toLocaleDateString('ro-MD');
-    await sheets.spreadsheets.values.append({
+
+    // Find the actual last row with data in column C (ignoring rows with only validation)
+    const colC = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: 'Comenzi!C:C',
+    });
+    const cRows = colC.data.values || [];
+    let lastDataRow = 1;
+    for (let i = cRows.length - 1; i >= 0; i--) {
+      if (cRows[i] && cRows[i][0] && String(cRows[i][0]).trim()) {
+        lastDataRow = i + 1;
+        break;
+      }
+    }
+    const nextRow = lastDataRow + 1;
+
+    await sheets.spreadsheets.values.update({
       spreadsheetId:    process.env.GOOGLE_SHEET_ID,
-      range:            'Comenzi!A:K',
+      range:            `Comenzi!A${nextRow}:K${nextRow}`,
       valueInputOption: 'USER_ENTERED',
       resource: { values: [[
         '', now, order.nume, order.telefon, order.email,
