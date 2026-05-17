@@ -89,24 +89,41 @@ module.exports = async function handler(req, res) {
 
   const results = {};
 
-  /* 1 — Update Google Sheets */
+  /* 1 — Update Google Sheets
+     Structura CRM: E=Adresa F=Produse M=Livrare P=Status
+                    T=Nota client U=Suma V=Nota manager
+  */
   try {
     const sheets = await getSheets();
+    const sid    = process.env.GOOGLE_SHEET_ID;
 
     if (action === 'edit') {
-      await sheets.spreadsheets.values.update({
-        spreadsheetId:    process.env.GOOGLE_SHEET_ID,
-        range:            `Comenzi!F${rowIndex}:L${rowIndex}`,
-        valueInputOption: 'USER_ENTERED',
-        resource: { values: [[order.produse, order.livrare, order.localitate, order.adresa, order.status, order.sursa, suma || '']] },
+      // Actualizăm doar celulele fără formule, evitând I J K L Q
+      await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId: sid,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: [
+            { range: `Comenzi!E${rowIndex}`, values: [[order.adresa]] },
+            { range: `Comenzi!F${rowIndex}`, values: [[order.produse]] },
+            { range: `Comenzi!M${rowIndex}`, values: [[order.livrare]] },
+            { range: `Comenzi!T${rowIndex}`, values: [[order.nota_client || '']] },
+            { range: `Comenzi!U${rowIndex}`, values: [[suma || '']] },
+          ],
+        },
       });
     } else {
       const newStatus = action === 'confirm' ? 'Confirmat' : 'Anulat';
-      await sheets.spreadsheets.values.update({
-        spreadsheetId:    process.env.GOOGLE_SHEET_ID,
-        range:            `Comenzi!J${rowIndex}:L${rowIndex}`,
-        valueInputOption: 'USER_ENTERED',
-        resource: { values: [[newStatus, order.sursa || 'Website', suma || '']] },
+      await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId: sid,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: [
+            { range: `Comenzi!P${rowIndex}`, values: [[newStatus]] },
+            { range: `Comenzi!U${rowIndex}`, values: [[suma || '']] },
+            { range: `Comenzi!V${rowIndex}`, values: [[nota || '']] },
+          ],
+        },
       });
     }
     results.sheets = 'ok';

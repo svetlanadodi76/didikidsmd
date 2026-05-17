@@ -213,6 +213,7 @@
       <div class="detail-item"><label>Sursă</label><span id="dSursa"></span></div>
       <div class="detail-item" id="dSumaWrap" style="display:none"><label>💰 Suma comenzii</label><span id="dSuma" style="color:var(--plum);font-weight:600"></span></div>
       <div class="detail-item" style="grid-column:1/-1"><label>Adresă</label><span id="dAdresa"></span></div>
+      <div class="detail-item" id="dNotaClientWrap" style="display:none;grid-column:1/-1"><label>💬 Observații client</label><span id="dNotaClient" style="font-style:italic;color:var(--muted)"></span></div>
     </div>
     <div class="detail-actions" id="dActions"></div>
     <div class="modal-actions" style="margin-top:1rem">
@@ -249,12 +250,12 @@
       </select>
     </div>
     <div class="modal-field">
-      <label>Localitate</label>
-      <input type="text" id="eLocalitate"/>
+      <label>Adresă completă</label>
+      <input type="text" id="eAdresa" placeholder="ex: or.Chișinău, str.Ștefan cel Mare 10"/>
     </div>
     <div class="modal-field">
-      <label>Adresă</label>
-      <input type="text" id="eAdresa"/>
+      <label>Observații client</label>
+      <textarea id="eNotaClient" rows="2" readonly style="background:#f0e8d8;color:var(--muted);cursor:default"></textarea>
     </div>
     <div class="modal-field">
       <label>Suma comenzii (MDL)</label>
@@ -448,7 +449,7 @@ function renderTable() {
       <td style="color:var(--muted);font-size:.8rem;white-space:nowrap">${o.data}</td>
       <td><strong>${o.nume}</strong><br><span style="color:var(--muted);font-size:.8rem">${o.telefon}</span></td>
       <td style="font-size:.85rem;max-width:200px">${o.produse}</td>
-      <td style="font-size:.85rem;white-space:nowrap">${o.livrare}</td>
+      <td style="font-size:.85rem;white-space:nowrap">${o.livrare}<br><span style="color:var(--muted);font-size:.75rem">${(o.adresa||'').split(',')[0]}</span></td>
       <td>${badge(o.status)}</td>
       <td class="actions-cell">${actions}</td>
     </tr>`;
@@ -482,9 +483,12 @@ function openDetails(rowIndex) {
   if (o.suma) {
     document.getElementById('dSuma').textContent = o.suma + ' MDL';
     sumaWrap.style.display = 'block';
-  } else {
-    sumaWrap.style.display = 'none';
-  }
+  } else { sumaWrap.style.display = 'none'; }
+  const notaClientWrap = document.getElementById('dNotaClientWrap');
+  if (o.nota_client) {
+    document.getElementById('dNotaClient').textContent = o.nota_client;
+    notaClientWrap.style.display = 'block';
+  } else { notaClientWrap.style.display = 'none'; }
 
   const actEl = document.getElementById('dActions');
   if (o.status === 'Nou') {
@@ -544,14 +548,14 @@ async function executeAction() {
 function openEditModal(rowIndex) {
   const o = allOrders.find(o => o.rowIndex === rowIndex);
   if (!o) return;
-  document.getElementById('eNume').value       = o.nume;
-  document.getElementById('eTelefon').value    = o.telefon;
-  document.getElementById('eEmail').value      = o.email;
-  document.getElementById('eProduse').value    = o.produse;
-  document.getElementById('eLivrare').value    = o.livrare;
-  document.getElementById('eLocalitate').value = o.localitate;
-  document.getElementById('eAdresa').value     = o.adresa;
-  document.getElementById('eSuma').value       = o.suma || '';
+  document.getElementById('eNume').value        = o.nume;
+  document.getElementById('eTelefon').value     = o.telefon;
+  document.getElementById('eEmail').value       = o.email;
+  document.getElementById('eProduse').value     = o.produse;
+  document.getElementById('eLivrare').value     = o.livrare;
+  document.getElementById('eAdresa').value      = o.adresa;
+  document.getElementById('eNotaClient').value  = o.nota_client || '';
+  document.getElementById('eSuma').value        = o.suma || '';
   document.getElementById('eNota').value       = '';
   document.getElementById('editModal').dataset.rowIndex = rowIndex;
   document.getElementById('editModal').classList.add('open');
@@ -567,10 +571,10 @@ async function saveEdit() {
   if (!order) return;
   const updated = {
     ...order,
-    produse:    document.getElementById('eProduse').value,
-    livrare:    document.getElementById('eLivrare').value,
-    localitate: document.getElementById('eLocalitate').value,
-    adresa:     document.getElementById('eAdresa').value,
+    produse:     document.getElementById('eProduse').value,
+    livrare:     document.getElementById('eLivrare').value,
+    adresa:      document.getElementById('eAdresa').value,
+    nota_client: order.nota_client || '',
   };
   const nota = document.getElementById('eNota').value.trim();
   const suma = document.getElementById('eSuma').value.trim();
