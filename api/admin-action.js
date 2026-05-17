@@ -130,6 +130,7 @@ module.exports = async function handler(req, res) {
   }
 
   /* 2 — Email către client */
+  console.log('Email attempt: action=', action, 'email=', order.email, 'suma=', suma);
   if ((action === 'confirm' || action === 'cancel') && order.email) {
     try {
       const subject = action === 'confirm'

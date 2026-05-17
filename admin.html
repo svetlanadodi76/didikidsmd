@@ -600,9 +600,18 @@ async function sendAction(rowIndex, action, order, nota, suma) {
     const data = await res.json();
     if (!res.ok) { showToast('Eroare: ' + (data.error || ''), 'error'); return; }
 
-    const msg = action==='confirm' ? '✅ Comandă confirmată — email trimis!'
-              : action==='cancel'  ? '❌ Comandă anulată — email trimis!'
-              :                      '✏️ Comanda a fost actualizată!';
+    const r = data.results || {};
+    let msg;
+    if (action === 'edit') {
+      msg = '✏️ Comanda a fost actualizată!';
+    } else {
+      const emailOk  = r.email  === 'ok';
+      const tgOk     = r.telegram === 'ok';
+      const icon     = action === 'confirm' ? '✅' : '❌';
+      msg = `${icon} ${action === 'confirm' ? 'Confirmat' : 'Anulat'}`;
+      msg += emailOk  ? ' · 📧 Email trimis' : ` · 📧 Email EROARE: ${JSON.stringify(r.email)}`;
+      msg += tgOk     ? ' · 📱 TG ok' : ` · 📱 TG EROARE`;
+    }
     showToast(msg, action==='confirm' ? 'success' : action==='cancel' ? 'error' : '');
 
     const idx = allOrders.findIndex(o => o.rowIndex === rowIndex);
