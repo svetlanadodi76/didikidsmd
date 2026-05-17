@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
 
     const resp = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: 'catalog!A:I',
+      range: 'catalog!A:J',
     });
 
     const rows = resp.data.values || [];
@@ -45,6 +45,7 @@ module.exports = async function handler(req, res) {
           categorie: col(6),
           imagine:   col(7),
           status:    col(8) || 'Activ',
+          gen:       col(9),
         };
       })
       .filter(p => p.cod && (isAdmin || p.status === 'Activ'));

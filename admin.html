@@ -373,6 +373,13 @@
       </select>
     </div>
     <div class="modal-field">
+      <label>Gen</label>
+      <select id="pGen">
+        <option value="fete">👧 Fete</option>
+        <option value="baieti">👦 Băieți</option>
+      </select>
+    </div>
+    <div class="modal-field">
       <label>Imagine (cale fișier)</label>
       <input type="text" id="pImagine" placeholder="ex: /images/CH010.jpg"/>
       <small>Încarcă imaginea în folderul /images/ din proiect, apoi scrie calea.</small>
@@ -845,10 +852,12 @@ function openProductModal(rowIndex) {
     document.getElementById('pCategorie').value = p.categorie || 'Altele';
     document.getElementById('pImagine').value   = p.imagine;
     document.getElementById('pStatus').value    = p.status || 'Activ';
+    document.getElementById('pGen').value       = p.gen || 'fete';
   } else {
     ['pCod','pNume','pPret','pMarimi','pImagine'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pCategorie').value = 'Rochii';
     document.getElementById('pStatus').value    = 'Activ';
+    document.getElementById('pGen').value       = 'fete';
   }
   document.getElementById('productModal').classList.add('open');
 }
@@ -867,6 +876,7 @@ async function saveProduct() {
     categorie: document.getElementById('pCategorie').value,
     imagine:   document.getElementById('pImagine').value.trim(),
     status:    document.getElementById('pStatus').value,
+    gen:       document.getElementById('pGen').value,
   };
   if (!product.cod || !product.nume || !product.pret) {
     showToast('Cod, Nume și Preț sunt obligatorii', 'error'); return;

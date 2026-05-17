@@ -1462,19 +1462,33 @@
     return { tip, gen };
   }
 
+  function parseMarimi(str) {
+    if (!str) return [];
+    const s = str.trim();
+    const rangeMatch = s.replace(/\s*cm\s*/gi, '').trim().match(/^(\d+)-(\d+)$/);
+    if (rangeMatch) {
+      const start = parseInt(rangeMatch[1]);
+      const end   = parseInt(rangeMatch[2]);
+      const sizes = [];
+      for (let v = start; v <= end; v += 10) sizes.push(String(v));
+      return sizes;
+    }
+    return s.split(',').map(x => x.trim()).filter(Boolean);
+  }
+
   async function loadProducts() {
     try {
       document.getElementById('productsGrid').innerHTML = '<p class="products-empty">Se încarcă produsele...</p>';
       const res  = await fetch('/api/catalog');
       const data = await res.json();
       PRODUCTS = (data.products || []).map(p => {
-        const { tip, gen } = mapCategorie(p.categorie);
+        const { tip, gen: genInferred } = mapCategorie(p.categorie);
         return {
           cod:     p.cod,
           name:    p.nume,
-          gen,
+          gen:     p.gen || genInferred,
           tip,
-          marimi:  p.marimi ? p.marimi.split(',').map(s => s.trim()).filter(Boolean) : [],
+          marimi:  parseMarimi(p.marimi),
           pret:    p.pret || '',
           imagine: p.imagine || '',
         };

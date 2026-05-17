@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
 
       await sheets.spreadsheets.values.update({
         spreadsheetId: sid,
-        range: `catalog!A${nextRow}:I${nextRow}`,
+        range: `catalog!A${nextRow}:J${nextRow}`,
         valueInputOption: 'USER_ENTERED',
         resource: { values: [[
           product.cod,
@@ -53,6 +53,7 @@ module.exports = async function handler(req, res) {
           product.categorie,
           product.imagine,
           product.status || 'Activ',
+          product.gen || '',
         ]] },
       });
 
@@ -70,6 +71,7 @@ module.exports = async function handler(req, res) {
             { range: `catalog!G${rowIndex}`, values: [[product.categorie]] },
             { range: `catalog!H${rowIndex}`, values: [[product.imagine]] },
             { range: `catalog!I${rowIndex}`, values: [[product.status]] },
+            { range: `catalog!J${rowIndex}`, values: [[product.gen || '']] },
           ],
         },
       });
