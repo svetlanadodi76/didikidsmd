@@ -51,8 +51,8 @@ module.exports = async function handler(req, res) {
       order.nume,                                  // C: Client
       order.telefon,                               // D: Telefon
       `${order.localitate}, ${order.adresa}`,      // E: Adresa
-      item ? item.cod : order.produse,             // F: Cod Produs
-      item ? `${item.name} - mări. ${item.size}` : '', // G: Descriere
+      item ? `${item.cod} - ${item.name} - ${item.size || ''}`.replace(/ - $/, '') : order.produse, // F: Cod Produs
+      '',                                          // G: Descriere (liber pentru admin)
       item ? String(item.qty) : '1',               // H: Cantitate
       item && item.pret ? item.pret : '',          // I: Preț/buc
       '',                                          // J: Cost/buc
