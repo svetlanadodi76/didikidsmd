@@ -851,6 +851,7 @@
     .modal-cod { font-size:0.75rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); }
     .modal-name { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:400; color:var(--plum); line-height:1.2; }
     .modal-price { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--text); }
+    .modal-descriere { font-size:0.9rem; color:var(--text-muted); line-height:1.5; margin:0.2rem 0 0.4rem; }
     .modal-material { font-size:0.95rem; font-style:italic; color:var(--text-muted); }
 
     .modal-sizes-title { font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem; }
@@ -1484,13 +1485,14 @@
       PRODUCTS = (data.products || []).map(p => {
         const { tip, gen: genInferred } = mapCategorie(p.categorie);
         return {
-          cod:     p.cod,
-          name:    p.nume,
-          gen:     p.gen || genInferred,
+          cod:      p.cod,
+          name:     p.nume,
+          gen:      p.gen || genInferred,
           tip,
-          marimi:  parseMarimi(p.marimi),
-          pret:    p.pret || '',
-          imagine: p.imagine || '',
+          marimi:   parseMarimi(p.marimi),
+          pret:     p.pret || '',
+          imagine:  p.imagine || '',
+          descriere: p.descriere || '',
         };
       });
     } catch(e) {
@@ -1600,6 +1602,7 @@
     document.getElementById('modalDetails').innerHTML = `
       <p class="modal-cod">${p.cod}</p>
       <h2 class="modal-name">${p.name}</h2>
+      ${p.descriere ? `<p class="modal-descriere">${p.descriere}</p>` : ''}
       <p class="modal-price">${p.pret ? p.pret + ' MDL' : '— MDL'}</p>
       <div>
         <p class="modal-sizes-title">Mărimi disponibile</p>
