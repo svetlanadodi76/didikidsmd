@@ -519,7 +519,7 @@ function askAction(rowIndex, action) {
   document.getElementById('confirmBtn').textContent   = isConfirm ? 'Da, confirmă' : 'Da, anulează';
   document.getElementById('confirmBtn').style.background = isConfirm ? '#0f5132' : '#842029';
   const livrare = order.livrare || '';
-  const isPosta = livrare.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().includes('posta');
+  const isPosta = livrare.includes('Moldovei') || livrare.toLowerCase().includes('posta');
   const bst = 'padding:.3rem .7rem;background:var(--soft);border:1px solid var(--gold);border-radius:12px;font-size:.75rem;color:var(--plum);cursor:pointer';
   const notaBtns = isPosta
     ? `<button type="button" style="${bst}" onclick="insertNota('La primirea notificarii prin sms la telefon, va rugam sa va apropiati la oficiul postal pentru ridicarea coletului dvs. O zi frumoasa sa aveti!')">📬 Ridicare oficiu poștal</button>
