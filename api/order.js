@@ -131,22 +131,34 @@ module.exports = async function handler(req, res) {
     `📍 *Adresă:* ${order.localitate}, ${order.adresa}` +
     (order.nota_client ? `\n💬 *Observații:* ${order.nota_client}` : '');
 
-  const [emailResult, tgResult] = await Promise.allSettled([
-    fetch('https://api.resend.com/emails', {
-      method:  'POST',
-      headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ from: 'DiDiKidsMD <onboarding@resend.dev>', to: order.email, subject: '✅ Comanda ta la DiDiKidsMD — înregistrată!', html: emailHtml }),
-    }).then(r => r.json().then(d => ({ ok: r.ok, data: d }))),
-    fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+  // Telegram first — fast (~1s), must not be blocked by slow email
+  try {
+    const tgRes  = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ chat_id: process.env.OWNER_CHAT_ID, text: tgText, parse_mode: 'Markdown' }),
-    }).then(r => r.json().then(d => ({ ok: r.ok, data: d }))),
-  ]);
+    });
+    const tgData = await tgRes.json();
+    results.telegram = tgRes.ok ? 'ok' : tgData;
+  } catch (e) {
+    results.telegram = e.message;
+  }
+  console.log('Telegram:', results.telegram);
 
-  results.email    = emailResult.status  === 'fulfilled' ? (emailResult.value.ok  ? 'ok' : emailResult.value.data)  : emailResult.reason?.message;
-  results.telegram = tgResult.status === 'fulfilled' ? (tgResult.value.ok ? 'ok' : tgResult.value.data) : tgResult.reason?.message;
-  console.log('Email:', results.email, '| Telegram:', results.telegram);
+  // Email — sandbox Resend poate fi lent pentru emailuri neînregistrate; limităm la 7s
+  const emailFetch = fetch('https://api.resend.com/emails', {
+    method:  'POST',
+    headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ from: 'DiDiKidsMD <onboarding@resend.dev>', to: order.email, subject: '✅ Comanda ta la DiDiKidsMD — înregistrată!', html: emailHtml }),
+  }).then(r => r.json().then(d => ({ ok: r.ok, data: d })));
+
+  const emailTimeout = new Promise(resolve =>
+    setTimeout(() => resolve({ ok: false, data: { error: 'email-timeout' } }), 7000)
+  );
+
+  const emailResult = await Promise.race([emailFetch, emailTimeout]);
+  results.email = emailResult.ok ? 'ok' : emailResult.data;
+  console.log('Email:', results.email);
 
   return res.status(200).json({ ok: true, results });
 };
