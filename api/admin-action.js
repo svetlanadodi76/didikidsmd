@@ -158,21 +158,21 @@ module.exports = async function handler(req, res) {
       const icon = action === 'confirm' ? '✅' : '❌';
       const statusText = action === 'confirm' ? 'CONFIRMATĂ' : 'ANULATĂ';
       const text =
-        `${icon} *Comanda ${statusText}*\n\n` +
-        `👤 *Client:* ${order.nume}\n` +
-        `📞 *Telefon:* ${order.telefon}\n` +
-        `📦 *Produse:* ${order.produse}\n` +
-        `🚚 *Livrare:* ${order.livrare}\n` +
-        `📍 *Adresă:* ${order.adresa}` +
-        (suma ? `\n💰 *Suma:* ${suma} MDL` : '') +
-        (nota ? `\n📝 *Notă:* ${nota}` : '');
+        `${icon} <b>Comanda ${statusText}</b>\n\n` +
+        `👤 <b>Client:</b> ${order.nume}\n` +
+        `📞 <b>Telefon:</b> ${order.telefon}\n` +
+        `📦 <b>Produse:</b> ${order.produse}\n` +
+        `🚚 <b>Livrare:</b> ${order.livrare}\n` +
+        `📍 <b>Adresă:</b> ${order.adresa}` +
+        (suma ? `\n💰 <b>Suma:</b> ${suma} MDL` : '') +
+        (nota ? `\n📝 <b>Notă:</b> ${nota}` : '');
 
       const tgRes = await fetch(
         `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`,
         {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ chat_id: process.env.OWNER_CHAT_ID, text, parse_mode: 'Markdown' }),
+          body:    JSON.stringify({ chat_id: process.env.OWNER_CHAT_ID, text, parse_mode: 'HTML' }),
         }
       );
       const tgData = await tgRes.json();

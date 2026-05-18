@@ -122,21 +122,21 @@ module.exports = async function handler(req, res) {
     </div>`;
 
   const tgText =
-    `🛍 *Comandă nouă de pe site!*\n\n` +
-    `👤 *Client:* ${order.nume}\n` +
-    `📞 *Telefon:* ${order.telefon}\n` +
-    `✉️ *Email:* ${order.email}\n` +
-    `📦 *Produse:* ${order.produse}\n` +
-    `🚚 *Livrare:* ${order.livrare}\n` +
-    `📍 *Adresă:* ${order.localitate}, ${order.adresa}` +
-    (order.nota_client ? `\n💬 *Observații:* ${order.nota_client}` : '');
+    `🛍 <b>Comandă nouă de pe site!</b>\n\n` +
+    `👤 <b>Client:</b> ${order.nume}\n` +
+    `📞 <b>Telefon:</b> ${order.telefon}\n` +
+    `✉️ <b>Email:</b> ${order.email}\n` +
+    `📦 <b>Produse:</b> ${order.produse}\n` +
+    `🚚 <b>Livrare:</b> ${order.livrare}\n` +
+    `📍 <b>Adresă:</b> ${order.localitate}, ${order.adresa}` +
+    (order.nota_client ? `\n💬 <b>Observații:</b> ${order.nota_client}` : '');
 
   // Telegram first — fast (~1s), must not be blocked by slow email
   try {
     const tgRes  = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ chat_id: process.env.OWNER_CHAT_ID, text: tgText, parse_mode: 'Markdown' }),
+      body:    JSON.stringify({ chat_id: process.env.OWNER_CHAT_ID, text: tgText, parse_mode: 'HTML' }),
     });
     const tgData = await tgRes.json();
     results.telegram = tgRes.ok ? 'ok' : tgData;
