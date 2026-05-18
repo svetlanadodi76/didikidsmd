@@ -380,8 +380,8 @@
     <div class="modal-field">
       <label>Gen</label>
       <select id="pGen">
-        <option value="fete">👧 Fete</option>
-        <option value="baieti">👦 Băieți</option>
+        <option value="Fete">👧 Fete</option>
+        <option value="Băieți">👦 Băieți</option>
       </select>
     </div>
     <div class="modal-field">
@@ -870,7 +870,7 @@ function openProductModal(rowIndex) {
     document.getElementById('pCategorie').value = p.categorie || 'Altele';
     document.getElementById('pImagine').value   = p.imagine;
     document.getElementById('pStatus').value    = p.status || 'Activ';
-    document.getElementById('pGen').value       = p.gen || 'fete';
+    document.getElementById('pGen').value       = p.gen || 'Fete';
     // Arată auto-fill banner dacă Nume sau Preț sunt goale (produs nou din bot)
     const needsFill = !p.nume || !p.pret;
     if (needsFill) {
@@ -889,7 +889,7 @@ function openProductModal(rowIndex) {
     ['pCod','pNume','pPret','pMarimi','pImagine'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pCategorie').value = 'Rochii';
     document.getElementById('pStatus').value    = 'Activ';
-    document.getElementById('pGen').value       = 'fete';
+    document.getElementById('pGen').value       = 'Fete';
     banner.style.display = 'none';
   }
   document.getElementById('downloadImgNote').textContent = 'Apasă 📸 Telegram pentru a descărca automat poza din Telegram.';
