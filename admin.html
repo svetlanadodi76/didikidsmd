@@ -370,6 +370,7 @@
       <select id="pCategorie">
         <option value="Rochii">Rochii</option>
         <option value="Costume">Costume</option>
+        <option value="Sport">Sport</option>
         <option value="Pantaloni">Pantaloni</option>
         <option value="Bluze">Bluze</option>
         <option value="Seturi">Seturi</option>
@@ -925,9 +926,10 @@ function parseDescriere(descriere, cod) {
   // Categorie din nume
   const nl = nume.toLowerCase().replace(/[ăâ]/g, 'a').replace(/î/g, 'i');
   if      (nl.includes('rochit') || nl.includes('rochie') || nl.includes('rochii')) result.categorie = 'Rochii';
+  else if (nl.includes('sport') || nl.includes('trening'))                           result.categorie = 'Sport';
   else if (nl.includes('pantalon'))                                                   result.categorie = 'Pantaloni';
   else if (nl.includes('bluza') || nl.includes('tricou') || nl.includes('maiou'))    result.categorie = 'Bluze';
-  else if (nl.includes('set') || nl.includes('costum') || nl.includes('trening'))    result.categorie = 'Costume';
+  else if (nl.includes('set') || nl.includes('costum'))                              result.categorie = 'Costume';
   else                                                                                result.categorie = 'Altele';
 
   result.imagine = `/images/${cod}.jpg`;
