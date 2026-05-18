@@ -345,8 +345,8 @@
   <div class="modal" style="max-width:480px">
     <h2 id="productModalTitle">Adaugă produs</h2>
     <div id="autoFillBanner" style="display:none;background:#f0e8d8;border-left:3px solid #c9a96e;padding:.8rem 1rem;margin-bottom:1.2rem;border-radius:4px;align-items:center;justify-content:space-between;gap:1rem;">
-      <span style="font-size:.83rem;color:#5c2d4a;">📋 Descriere bot detectată în Sheets</span>
-      <button onclick="autoFillFromDescriere()" style="background:#5c2d4a;color:#faf6f0;border:none;padding:.4rem .9rem;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">✨ Auto-fill câmpuri</button>
+      <span id="autoFillMsg" style="font-size:.83rem;color:#5c2d4a;">📋 Câmpuri incomplete — completează pentru site</span>
+      <button onclick="autoFillFromDescriere()" style="background:#5c2d4a;color:#faf6f0;border:none;padding:.4rem .9rem;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">✨ Auto-fill</button>
     </div>
     <div class="modal-field">
       <label>Cod produs *</label>
@@ -862,9 +862,17 @@ function openProductModal(rowIndex) {
     document.getElementById('pImagine').value   = p.imagine;
     document.getElementById('pStatus').value    = p.status || 'Activ';
     document.getElementById('pGen').value       = p.gen || 'fete';
-    // Arată auto-fill banner dacă există descriere bot și câmpurile D-J sunt goale
-    const needsFill = editingProductDescriere && (!p.nume || !p.pret);
-    banner.style.display = needsFill ? 'flex' : 'none';
+    // Arată auto-fill banner dacă Nume sau Preț sunt goale (produs nou din bot)
+    const needsFill = !p.nume || !p.pret;
+    if (needsFill) {
+      const msg = document.getElementById('autoFillMsg');
+      msg.textContent = editingProductDescriere
+        ? '📋 Descriere bot detectată — completez automat câmpurile'
+        : '⚠️ Câmpuri incomplete — completează Nume, Preț, Mărimi, Gen';
+      banner.style.display = 'flex';
+    } else {
+      banner.style.display = 'none';
+    }
   } else {
     editingProductDescriere = '';
     editingProductCod = '';
@@ -924,7 +932,10 @@ function autoFillFromDescriere() {
   if (parsed.categorie) document.getElementById('pCategorie').value = parsed.categorie;
   if (parsed.imagine)   document.getElementById('pImagine').value   = parsed.imagine;
   document.getElementById('autoFillBanner').style.display = 'none';
-  showToast('✨ Câmpuri completate automat — verifică și salvează!', 'success');
+  const msg = editingProductDescriere
+    ? '✨ Câmpuri completate automat — verifică, adaugă Gen și salvează!'
+    : '📝 Imagine pre-completată — adaugă Nume, Preț, Mărimi, Gen și salvează!';
+  showToast(msg, 'success');
 }
 
 async function saveProduct() {
