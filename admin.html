@@ -996,13 +996,14 @@ async function saveProduct() {
   if (!product.cod || !product.nume || !product.pret) {
     showToast('Cod, Nume și Preț sunt obligatorii', 'error'); return;
   }
-  const isEdit = editingProductRow !== null;
+  const rowIndex = editingProductRow;
+  const isEdit   = rowIndex !== null;
   closeProductModal();
   try {
     const res  = await fetch('/api/catalog-action', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: isEdit ? 'edit' : 'add', rowIndex: editingProductRow, product }),
+      body: JSON.stringify({ action: isEdit ? 'edit' : 'add', rowIndex, product }),
     });
     const data = await res.json();
     if (!res.ok) { showToast('Eroare: ' + (data.error||''), 'error'); return; }
