@@ -384,9 +384,15 @@
       </select>
     </div>
     <div class="modal-field">
-      <label>Imagine (cale fișier)</label>
-      <input type="text" id="pImagine" placeholder="ex: /images/CH010.jpg"/>
-      <small>Încarcă imaginea în folderul /images/ din proiect, apoi scrie calea.</small>
+      <label>Imagine</label>
+      <div style="display:flex;gap:.5rem;align-items:center;">
+        <input type="text" id="pImagine" placeholder="ex: /images/CH010.jpg" style="flex:1"/>
+        <button id="btnDownloadImg" onclick="downloadImageFromTelegram()"
+                style="background:#5c2d4a;color:#faf6f0;border:none;padding:.6rem .9rem;border-radius:8px;cursor:pointer;font-size:.82rem;white-space:nowrap;flex-shrink:0;">
+          📸 Telegram
+        </button>
+      </div>
+      <small id="downloadImgNote">Apasă 📸 Telegram pentru a descărca automat poza din Telegram.</small>
     </div>
     <div class="modal-field">
       <label>Status</label>
@@ -776,6 +782,7 @@ let catalogProducts = [];
 let editingProductRow = null;
 let editingProductDescriere = '';
 let editingProductCod = '';
+let editingProductFileId = '';
 
 async function loadCatalog() {
   document.getElementById('catalogWrap').innerHTML = '<div class="loading"><div class="spinner"></div>Se încarcă catalogul...</div>';
@@ -854,6 +861,7 @@ function openProductModal(rowIndex) {
     if (!p) return;
     editingProductDescriere = p.descriere || '';
     editingProductCod       = p.cod || '';
+    editingProductFileId    = p.fileId || '';
     document.getElementById('pCod').value       = p.cod;
     document.getElementById('pNume').value      = p.nume;
     document.getElementById('pPret').value      = p.pret;
@@ -875,13 +883,15 @@ function openProductModal(rowIndex) {
     }
   } else {
     editingProductDescriere = '';
-    editingProductCod = '';
+    editingProductCod       = '';
+    editingProductFileId    = '';
     ['pCod','pNume','pPret','pMarimi','pImagine'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pCategorie').value = 'Rochii';
     document.getElementById('pStatus').value    = 'Activ';
     document.getElementById('pGen').value       = 'fete';
     banner.style.display = 'none';
   }
+  document.getElementById('downloadImgNote').textContent = 'Apasă 📸 Telegram pentru a descărca automat poza din Telegram.';
   document.getElementById('productModal').classList.add('open');
 }
 
@@ -936,6 +946,38 @@ function autoFillFromDescriere() {
     ? '✨ Câmpuri completate automat — verifică, adaugă Gen și salvează!'
     : '📝 Imagine pre-completată — adaugă Nume, Preț, Mărimi, Gen și salvează!';
   showToast(msg, 'success');
+}
+
+async function downloadImageFromTelegram() {
+  const cod    = document.getElementById('pCod').value.trim();
+  const fileId = editingProductFileId;
+  if (!fileId) { showToast('❌ Produsul nu are FileID Telegram (col B din Sheets)', 'error'); return; }
+  if (!cod)    { showToast('❌ Completează Codul produsului mai întâi', 'error'); return; }
+
+  const btn  = document.getElementById('btnDownloadImg');
+  const note = document.getElementById('downloadImgNote');
+  btn.textContent = '⏳ Se descarcă...';
+  btn.disabled    = true;
+
+  try {
+    const res  = await fetch('/api/download-image', {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ cod, fileId }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Eroare server');
+
+    document.getElementById('pImagine').value = data.url;
+    note.textContent = '✅ Imaginea a fost încărcată în Vercel Blob!';
+    showToast('✅ Poză descărcată din Telegram și încărcată!', 'success');
+  } catch (e) {
+    showToast('❌ Eroare: ' + e.message, 'error');
+    note.textContent = 'Eroare la descărcare — încearcă din nou.';
+  } finally {
+    btn.textContent = '📸 Telegram';
+    btn.disabled    = false;
+  }
 }
 
 async function saveProduct() {
