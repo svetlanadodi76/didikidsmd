@@ -1707,7 +1707,7 @@
     const key = `${cod}-${modalSelectedSize}`;
     const ex  = cart.find(i => i.key === key);
     if (ex) { ex.qty += modalQty; }
-    else { cart.push({ key, cod, name:p.name, tip:p.tip, size:modalSelectedSize, qty:modalQty, pret:p.pret }); }
+    else { cart.push({ key, cod, name:p.name, tip:p.tip, size:modalSelectedSize, qty:modalQty, pret:p.pret, imagine:p.imagine||'' }); }
     saveCart();
     updateCartBadge();
     const btn = document.getElementById('modalCartBtn');
@@ -1839,7 +1839,9 @@
     const cartTotal = cart.reduce((s,i) => s + (Number(i.pret)||0) * i.qty, 0);
     body.innerHTML = cart.map(item => `
       <div class="cart-item">
-        <div class="cart-item-thumb ${item.tip}">${ICONS[item.tip]||'👕'}</div>
+        ${item.imagine
+          ? `<img src="${item.imagine}" alt="${item.name}" class="cart-item-thumb" style="object-fit:cover;">`
+          : `<div class="cart-item-thumb ${item.tip}">${ICONS[item.tip]||'👕'}</div>`}
         <div class="cart-item-info">
           <p class="cart-item-cod">${item.cod}</p>
           <p class="cart-item-name">${item.name}</p>
