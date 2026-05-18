@@ -1460,6 +1460,13 @@
       .trim();
   }
 
+  function normalizeGen(str) {
+    const s = (str || '').toLowerCase().replace(/[ăâ]/g, 'a').replace(/[îí]/g, 'i').trim();
+    if (s.includes('baiet') || s.includes('baieti') || s === 'b') return 'baieti';
+    if (s.includes('fete') || s.includes('fata') || s === 'f')    return 'fete';
+    return '';
+  }
+
   function mapCategorie(categorie) {
     const c = (categorie || '').toLowerCase();
     let tip = 'costum';
@@ -1516,7 +1523,7 @@
         return {
           cod:      p.cod,
           name:     cleanName(p.nume),
-          gen:      p.gen || genInferred,
+          gen:      normalizeGen(p.gen) || genInferred,
           tip,
           marimi:   parseMarimi(p.marimi),
           pret:     p.pret || '',
@@ -1563,8 +1570,9 @@
 
   function filterProducts() {
     return PRODUCTS.filter(p => {
-      if (currentGender === 'fete'   && p.tip !== 'rochie' && p.gen !== 'fete')   return false;
-      if (currentGender === 'baieti' && p.gen !== 'baieti')                        return false;
+      const gen = (p.gen || '').toLowerCase().trim();
+      if (currentGender === 'baieti' && gen !== 'baieti') return false;
+      if (currentGender === 'fete'   && gen === 'baieti') return false;
       if (currentCat === 'toate') return true;
       const cat = CATEGORIES[currentGender].find(c => c.id === currentCat);
       return cat && p.tip === cat.keyword;
