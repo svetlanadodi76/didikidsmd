@@ -344,6 +344,10 @@
 <div class="modal-overlay" id="productModal">
   <div class="modal" style="max-width:480px">
     <h2 id="productModalTitle">Adaugă produs</h2>
+    <div id="autoFillBanner" style="display:none;background:#f0e8d8;border-left:3px solid #c9a96e;padding:.8rem 1rem;margin-bottom:1.2rem;border-radius:4px;align-items:center;justify-content:space-between;gap:1rem;">
+      <span style="font-size:.83rem;color:#5c2d4a;">📋 Descriere bot detectată în Sheets</span>
+      <button onclick="autoFillFromDescriere()" style="background:#5c2d4a;color:#faf6f0;border:none;padding:.4rem .9rem;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">✨ Auto-fill câmpuri</button>
+    </div>
     <div class="modal-field">
       <label>Cod produs *</label>
       <input type="text" id="pCod" placeholder="ex: CH010"/>
@@ -770,6 +774,8 @@ function showSection(name) {
 /* ── CATALOG ── */
 let catalogProducts = [];
 let editingProductRow = null;
+let editingProductDescriere = '';
+let editingProductCod = '';
 
 async function loadCatalog() {
   document.getElementById('catalogWrap').innerHTML = '<div class="loading"><div class="spinner"></div>Se încarcă catalogul...</div>';
@@ -842,9 +848,12 @@ function openProductModal(rowIndex) {
   const isEdit = rowIndex !== null;
   document.getElementById('productModalTitle').textContent = isEdit ? '✏️ Editează produs' : '➕ Adaugă produs';
 
+  const banner = document.getElementById('autoFillBanner');
   if (isEdit) {
     const p = catalogProducts.find(p => p.rowIndex === rowIndex);
     if (!p) return;
+    editingProductDescriere = p.descriere || '';
+    editingProductCod       = p.cod || '';
     document.getElementById('pCod').value       = p.cod;
     document.getElementById('pNume').value      = p.nume;
     document.getElementById('pPret').value      = p.pret;
@@ -853,11 +862,17 @@ function openProductModal(rowIndex) {
     document.getElementById('pImagine').value   = p.imagine;
     document.getElementById('pStatus').value    = p.status || 'Activ';
     document.getElementById('pGen').value       = p.gen || 'fete';
+    // Arată auto-fill banner dacă există descriere bot și câmpurile D-J sunt goale
+    const needsFill = editingProductDescriere && (!p.nume || !p.pret);
+    banner.style.display = needsFill ? 'flex' : 'none';
   } else {
+    editingProductDescriere = '';
+    editingProductCod = '';
     ['pCod','pNume','pPret','pMarimi','pImagine'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pCategorie').value = 'Rochii';
     document.getElementById('pStatus').value    = 'Activ';
     document.getElementById('pGen').value       = 'fete';
+    banner.style.display = 'none';
   }
   document.getElementById('productModal').classList.add('open');
 }
@@ -865,6 +880,51 @@ function openProductModal(rowIndex) {
 function closeProductModal() {
   document.getElementById('productModal').classList.remove('open');
   editingProductRow = null;
+}
+
+function parseDescriere(descriere, cod) {
+  const d = (descriere || '').trim();
+  const result = {};
+
+  // Preț
+  const pretMatch = d.match(/[Pp]ret\s*:?\s*(\d+)/);
+  if (pretMatch) result.pret = pretMatch[1];
+
+  // Mărimi
+  const marimiMatch = d.match(/m[aă]rimi?\s+d[iî]?s?ponibil\S*\s*:?\s*([^\n]*?)(?:\s+[Pp]ret|\s+[Pp]roducator|\s*$)/i);
+  if (marimiMatch) result.marimi = marimiMatch[1].trim().replace(/\s+/g, ' ');
+
+  // Nume: elimină codul, metadata bot
+  let nume = d
+    .replace(/^[Cc]od\s+[A-Za-z]+\d+\s*/g, '')
+    .replace(/^[A-Za-z]+\d+\s*/g, '')
+    .replace(/\s+m[aă]rimi?\s+.*/gi, '')
+    .replace(/\s+[Pp]roducator\s+.*/g, '')
+    .replace(/\s+[Pp]ret\s*:?\s*\d+.*/g, '')
+    .trim();
+  result.nume = nume;
+
+  // Categorie din nume
+  const nl = nume.toLowerCase().replace(/[ăâ]/g, 'a').replace(/î/g, 'i');
+  if      (nl.includes('rochit') || nl.includes('rochie') || nl.includes('rochii')) result.categorie = 'Rochii';
+  else if (nl.includes('pantalon'))                                                   result.categorie = 'Pantaloni';
+  else if (nl.includes('bluza') || nl.includes('tricou') || nl.includes('maiou'))    result.categorie = 'Bluze';
+  else if (nl.includes('set') || nl.includes('costum') || nl.includes('trening'))    result.categorie = 'Costume';
+  else                                                                                result.categorie = 'Altele';
+
+  result.imagine = `/images/${cod}.jpg`;
+  return result;
+}
+
+function autoFillFromDescriere() {
+  const parsed = parseDescriere(editingProductDescriere, editingProductCod);
+  if (parsed.nume)      document.getElementById('pNume').value      = parsed.nume;
+  if (parsed.pret)      document.getElementById('pPret').value      = parsed.pret;
+  if (parsed.marimi)    document.getElementById('pMarimi').value    = parsed.marimi;
+  if (parsed.categorie) document.getElementById('pCategorie').value = parsed.categorie;
+  if (parsed.imagine)   document.getElementById('pImagine').value   = parsed.imagine;
+  document.getElementById('autoFillBanner').style.display = 'none';
+  showToast('✨ Câmpuri completate automat — verifică și salvează!', 'success');
 }
 
 async function saveProduct() {
