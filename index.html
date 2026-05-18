@@ -699,37 +699,44 @@
       margin-bottom: 2.5rem;
       line-height: 1.7;
     }
-    .newsletter-form {
+    .social-channels {
       display: flex;
-      gap: 0;
-      max-width: 460px;
-      margin: 0 auto;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
-    .newsletter-form input {
-      flex: 1;
-      padding: 0.85rem 1.2rem;
+    .social-channel-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 2rem 2.8rem;
       border: 1px solid var(--cream-dark);
       background: var(--white);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
+      text-decoration: none;
       color: var(--text);
-      outline: none;
+      transition: all 0.3s;
+      min-width: 130px;
     }
-    .newsletter-form input:focus { border-color: var(--plum); }
-    .newsletter-form input::placeholder { color: var(--text-muted); font-style: italic; }
-    .newsletter-form button {
-      padding: 0.85rem 1.8rem;
+    .social-channel-card:hover {
+      border-color: var(--plum);
       background: var(--plum);
       color: var(--cream);
-      border: none;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.3s;
     }
-    .newsletter-form button:hover { background: var(--text); }
+    .social-channel-card svg { width: 28px; height: 28px; }
+    .social-channel-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.05em;
+    }
+    .social-channel-action {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: color 0.3s;
+    }
+    .social-channel-card:hover .social-channel-action { color: var(--cream); }
 
     /* ── FOOTER ── */
     footer {
@@ -1003,8 +1010,8 @@
       .footer-inner { grid-template-columns: 1fr; gap: 2.5rem; }
       .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
 
-      .newsletter-form { flex-direction: column; }
-      .newsletter-form input { border-bottom: none; }
+      .social-channels { flex-direction: column; align-items: center; }
+      .social-channel-card { width: 100%; max-width: 280px; }
 
       .hero-arc-1, .hero-arc-2, .hero-arc-3 { display: none; }
 
@@ -1350,13 +1357,34 @@
     <span class="section-label">Rămâi la curent</span>
     <h2 class="section-title">Fii prima care află</h2>
     <p class="newsletter-sub">
-      Înscrie-te și primești primele știri despre colecțiile noi,
-      oferte exclusive și inspirație pentru garderoba celui mic.
+      Urmărește-ne pe canalele preferate și primești primele știri despre
+      colecțiile noi, oferte exclusive și inspirație pentru garderoba celui mic.
     </p>
-    <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-      <input type="email" placeholder="adresa ta de email" required/>
-      <button type="submit">Abonează-te</button>
-    </form>
+    <div class="social-channels">
+      <a href="https://t.me/didikidsmd" target="_blank" rel="noopener" class="social-channel-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/>
+        </svg>
+        <span class="social-channel-name">Telegram</span>
+        <span class="social-channel-action">Urmărește</span>
+      </a>
+      <a href="https://instagram.com/didikidsmd" target="_blank" rel="noopener" class="social-channel-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="social-channel-name">Instagram</span>
+        <span class="social-channel-action">Urmărește</span>
+      </a>
+      <a href="https://facebook.com/didikidsmd" target="_blank" rel="noopener" class="social-channel-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        </svg>
+        <span class="social-channel-name">Facebook</span>
+        <span class="social-channel-action">Urmărește</span>
+      </a>
+    </div>
   </div>
 </section>
 
