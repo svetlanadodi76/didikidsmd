@@ -116,6 +116,11 @@
     }
     .nav-cta::after { display: none !important; }
 
+    .lang-toggle { display:flex; align-items:center; gap:0.1rem; }
+    .lang-btn { background:none; border:none; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; color:var(--text-muted); cursor:pointer; padding:0.22rem 0.45rem; border-radius:3px; transition:all .2s; font-family:'Cormorant Garamond',serif; }
+    .lang-btn:hover { color:var(--plum); }
+    .lang-btn.active { color:var(--plum); border-bottom:2px solid var(--gold); }
+
     .nav-toggle {
       display: none;
       background: none;
@@ -1063,11 +1068,15 @@
     <span class="nav-logo-text">didikidsmd</span>
   </div>
   <ul class="nav-links">
-    <li><a href="#catalog">Catalog</a></li>
-    <li><a href="#despre">Despre noi</a></li>
-    <li><a href="#contact" class="nav-cta">Contact</a></li>
+    <li><a href="#catalog" data-i18n="nav.catalog">Catalog</a></li>
+    <li><a href="#despre" data-i18n="nav.about">Despre noi</a></li>
+    <li><a href="#contact" class="nav-cta" data-i18n="nav.contact">Contact</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="ro" onclick="setLang('ro')">RO</button>
+      <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+    </div>
     <button class="cart-btn" id="favBtn" aria-label="Favorite" onclick="openFavorites()">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
       <span class="cart-badge hidden" id="favBadge">0</span>
@@ -1085,15 +1094,15 @@
 <!-- Mobile nav -->
 <div class="nav-mobile" id="navMobile">
   <button class="nav-mobile-close" id="navClose">✕</button>
-  <a href="#catalog" onclick="closeNav()">Colecții</a>
-  <a href="#despre"   onclick="closeNav()">Despre noi</a>
-  <a href="#valori"   onclick="closeNav()">Filosofie</a>
-  <a href="#contact"  onclick="closeNav()">Contact</a>
+  <a href="#catalog" onclick="closeNav()" data-i18n="nav.catalog">Catalog</a>
+  <a href="#despre"   onclick="closeNav()" data-i18n="nav.about">Despre noi</a>
+  <a href="#valori"   onclick="closeNav()" data-i18n="nav.values">Filosofie</a>
+  <a href="#contact"  onclick="closeNav()" data-i18n="nav.contact">Contact</a>
 </div>
 
 <!-- ── ANNOUNCE BAR ── -->
 <div class="announce" style="margin-top:0;">
-  <span class="announce-inner">
+  <span class="announce-inner" id="announceInner">
     🐻 Fete & Băieți &nbsp;•&nbsp;
     🚚 Livrare gratuită pe tot teritoriul Moldovei &nbsp;•&nbsp;
     🌿 Materiale naturale, blânde pentru pielea copilului &nbsp;•&nbsp;
@@ -1119,14 +1128,14 @@
     <div class="hero-arc hero-arc-2"></div>
     <div class="hero-arc hero-arc-3"></div>
     <div class="hero-content">
-      <p class="hero-label">Fete & Băieți</p>
+      <p class="hero-label" data-i18n="hero.label">Fete & Băieți</p>
       <h1 class="brand-name">didikidsmd</h1>
       <p class="hero-script">Gentle</p>
-      <p class="tagline">Haine care îmbrățișează copilăria.</p>
+      <p class="tagline" data-i18n="hero.tagline">Haine care îmbrățișează copilăria.</p>
       <div class="hero-divider"></div>
       <div class="hero-ctas">
-        <a href="#catalog" class="btn btn-primary">Descoperă colecția</a>
-        <a href="https://t.me/didikidsmd_bot" target="_blank" class="btn btn-outline">🤖 Comandă pe Telegram</a>
+        <a href="#catalog" class="btn btn-primary" data-i18n="hero.btn1">Descoperă colecția</a>
+        <a href="https://t.me/didikidsmd_bot" target="_blank" class="btn btn-outline" data-i18n="hero.btn2">🤖 Comandă pe Telegram</a>
       </div>
     </div>
   </div>
@@ -1149,9 +1158,9 @@
 <!-- ── COLLECTIONS ── -->
 <section class="collections" id="livrare">
   <div class="section-header reveal">
-    <span class="section-label">Livrare</span>
-    <h2 class="section-title">Livrăm la tine acasă</h2>
-    <p class="section-sub">Rapid, sigur și fără costuri suplimentare.</p>
+    <span class="section-label" data-i18n="delivery.label">Livrare</span>
+    <h2 class="section-title" data-i18n="delivery.title">Livrăm la tine acasă</h2>
+    <p class="section-sub" data-i18n="delivery.sub">Rapid, sigur și fără costuri suplimentare.</p>
   </div>
 
   <div class="collections-grid">
@@ -1160,9 +1169,9 @@
         <span class="coll-icon">📮</span>
       </div>
       <div class="coll-body">
-        <p class="coll-age">Disponibil în toată Moldova</p>
-        <h3 class="coll-name">Poșta Moldovei</h3>
-        <p class="coll-desc">Livrare în 2–3 zile lucrătoare la cel mai apropiat oficiu poștal.</p>
+        <p class="coll-age" data-i18n="delivery.posta.avail">Disponibil în toată Moldova</p>
+        <h3 class="coll-name" data-i18n="delivery.posta.name">Poșta Moldovei</h3>
+        <p class="coll-desc" data-i18n="delivery.posta.desc">Livrare în 2–3 zile lucrătoare la cel mai apropiat oficiu poștal.</p>
       </div>
     </div>
 
@@ -1171,9 +1180,9 @@
         <span class="coll-icon">🏃</span>
       </div>
       <div class="coll-body">
-        <p class="coll-age">Disponibil în toată Moldova</p>
-        <h3 class="coll-name">Curier</h3>
-        <p class="coll-desc">Livrare în 2–3 zile lucrătoare direct la ușa ta, oriunde în Republica Moldova.</p>
+        <p class="coll-age" data-i18n="delivery.curier.avail">Disponibil în toată Moldova</p>
+        <h3 class="coll-name" data-i18n="delivery.curier.name">Curier</h3>
+        <p class="coll-desc" data-i18n="delivery.curier.desc">Livrare în 2–3 zile lucrătoare direct la ușa ta, oriunde în Republica Moldova.</p>
       </div>
     </div>
   </div>
@@ -1181,8 +1190,8 @@
   <div class="livrare-gratuit reveal">
     <span class="livrare-gratuit-icon">🎁</span>
     <div>
-      <p class="livrare-gratuit-title">Livrare GRATUITĂ</p>
-      <p class="livrare-gratuit-sub">pe tot teritoriul Republicii Moldova</p>
+      <p class="livrare-gratuit-title" data-i18n="delivery.free.title">Livrare GRATUITĂ</p>
+      <p class="livrare-gratuit-sub" data-i18n="delivery.free.sub">pe tot teritoriul Republicii Moldova</p>
     </div>
   </div>
 </section>
@@ -1190,12 +1199,12 @@
 <!-- ── CATALOG ── -->
 <section class="catalog" id="catalog">
   <div class="section-header reveal">
-    <span class="section-label">Colecția noastră</span>
-    <h2 class="section-title">Eleganță pentru cei mai mici</h2>
+    <span class="section-label" data-i18n="catalog.label">Colecția noastră</span>
+    <h2 class="section-title" data-i18n="catalog.title">Eleganță pentru cei mai mici</h2>
   </div>
   <div class="gender-tabs">
-    <button class="gender-tab active" data-gender="fete" onclick="setGender('fete')">🎀 Fete</button>
-    <button class="gender-tab" data-gender="baieti" onclick="setGender('baieti')">🚀 Băieți</button>
+    <button class="gender-tab active" data-gender="fete" onclick="setGender('fete')" data-i18n="catalog.tab.fete">🎀 Fete</button>
+    <button class="gender-tab" data-gender="baieti" onclick="setGender('baieti')" data-i18n="catalog.tab.baieti">🚀 Băieți</button>
   </div>
   <div class="cat-filters" id="catFilters"></div>
   <div class="products-grid" id="productsGrid"></div>
@@ -1215,21 +1224,21 @@
 <div class="cart-overlay" id="cartOverlay" onclick="closeAllDrawers()"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
-    <span class="cart-head-title">Coșul meu</span>
+    <span class="cart-head-title" data-i18n="cart.title">Coșul meu</span>
     <button class="cart-head-close" onclick="closeCart()">✕</button>
   </div>
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-foot" id="cartFoot" style="display:none">
     <div class="cart-total-row">
-      <span class="cart-total-lbl">Total</span>
+      <span class="cart-total-lbl" data-i18n="cart.total">Total</span>
       <span class="cart-total-val" id="cartTotalVal">0 MDL</span>
     </div>
-    <button class="btn-checkout-tg" onclick="openOrderForm()">Comandă acum</button>
-    <button class="btn-checkout-form" onclick="toggleContactOptions()">Contactează-ne ▾</button>
+    <button class="btn-checkout-tg" onclick="openOrderForm()" data-i18n="cart.order">Comandă acum</button>
+    <button class="btn-checkout-form" onclick="toggleContactOptions()" data-i18n="cart.contact">Contactează-ne ▾</button>
     <div class="contact-options" id="contactOptions">
       <a href="https://t.me/didikidsmd_bot" target="_blank" class="contact-opt">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-        Contactează-ne pe Telegram
+        <span data-i18n="cart.contact.tg">Contactează-ne pe Telegram</span>
       </a>
       <a href="https://instagram.com/didikidsmd" target="_blank" class="contact-opt">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -1246,7 +1255,7 @@
 <!-- ── FAVORITES DRAWER ── -->
 <div class="cart-drawer" id="favDrawer" style="left:0;right:auto;transform:translateX(-100%);">
   <div class="cart-head">
-    <span class="cart-head-title">♥ Favorite</span>
+    <span class="cart-head-title" data-i18n="fav.title">♥ Favorite</span>
     <button class="cart-head-close" onclick="closeFavorites()">✕</button>
   </div>
   <div class="cart-body" id="favBody"></div>
@@ -1264,12 +1273,12 @@
 <section class="banner">
   <div class="banner-content reveal">
     <span class="banner-script">Gentle</span>
-    <h2 class="banner-title">Hăinuțe pentru fete și băieți</h2>
-    <p class="banner-text">
+    <h2 class="banner-title" data-i18n="banner.title">Hăinuțe pentru fete și băieți</h2>
+    <p class="banner-text" data-i18n="banner.text">
       Culori luminoase, țesături naturale și croieli gânditoare —
       pentru copiii care merită tot ce e mai bun.
     </p>
-    <a href="#catalog" class="btn-gold">Descoperă acum</a>
+    <a href="#catalog" class="btn-gold" data-i18n="banner.btn">Descoperă acum</a>
   </div>
 </section>
 
@@ -1284,21 +1293,12 @@
   </div>
 
   <div class="about-text reveal" style="transition-delay: 0.2s">
-    <span class="section-label">Povestea noastră</span>
-    <h2 class="about-title">Creat cu dragoste,<br>pentru cei mai mici</h2>
+    <span class="section-label" data-i18n="about.label">Povestea noastră</span>
+    <h2 class="about-title" data-i18n="about.title">Creat cu dragoste,<br>pentru cei mai mici</h2>
     <div class="about-body">
-      <p>
-        La DiDiKidsMD credem că fiecare copil merită hăinuțe care îl lasă să exploreze lumea liber,
-        să râdă, să alerge și să viseze — fără restricții, fără disconfort.
-      </p>
-      <p>
-        Alegem cu grijă fiecare material: bumbac organic, țesături blânde, culori naturale,
-        care nu irită pielea sensibilă a celor mici și rezistă la aventurile de zi cu zi.
-      </p>
-      <p>
-        Fiecare piesă din colecția noastră este gândită cu suflet — pentru că copilăria
-        e cea mai frumoasă aventură, și hăinuțele trebuie să o celebreze.
-      </p>
+      <p data-i18n="about.p1">La DiDiKidsMD credem că fiecare copil merită hăinuțe care îl lasă să exploreze lumea liber, să râdă, să alerge și să viseze — fără restricții, fără disconfort.</p>
+      <p data-i18n="about.p2">Alegem cu grijă fiecare material: bumbac organic, țesături blânde, culori naturale, care nu irită pielea sensibilă a celor mici și rezistă la aventurile de zi cu zi.</p>
+      <p data-i18n="about.p3">Fiecare piesă din colecția noastră este gândită cu suflet — pentru că copilăria e cea mai frumoasă aventură, și hăinuțele trebuie să o celebreze.</p>
     </div>
     <p class="about-sig">DiDiKidsMD</p>
   </div>
@@ -1308,33 +1308,24 @@
 <section class="values" id="valori">
   <div class="values-inner">
     <div class="section-header reveal">
-      <span class="section-label">Filosofia noastră</span>
-      <h2 class="section-title">De ce DiDiKidsMD?</h2>
+      <span class="section-label" data-i18n="values.label">Filosofia noastră</span>
+      <h2 class="section-title" data-i18n="values.title">De ce DiDiKidsMD?</h2>
     </div>
     <div class="values-grid">
       <div class="value-card reveal">
         <div class="value-icon">🌿</div>
-        <h3 class="value-title">Materiale naturale</h3>
-        <p class="value-text">
-          Bumbac organic, muselină și țesături certificate — prietenoase cu pielea
-          sensibilă a copiilor și cu mediul înconjurător.
-        </p>
+        <h3 class="value-title" data-i18n="values.v1.title">Materiale naturale</h3>
+        <p class="value-text" data-i18n="values.v1.text">Bumbac organic, muselină și țesături certificate — prietenoase cu pielea sensibilă a copiilor și cu mediul înconjurător.</p>
       </div>
       <div class="value-card reveal" style="transition-delay: 0.15s">
         <div class="value-icon">🐻</div>
-        <h3 class="value-title">Design cu suflet</h3>
-        <p class="value-text">
-          Fiecare piesă e creată cu dragoste, inspirată din lumea magică a copilăriei —
-          rafinament discret care încântă și părinții, și copiii.
-        </p>
+        <h3 class="value-title" data-i18n="values.v2.title">Design cu suflet</h3>
+        <p class="value-text" data-i18n="values.v2.text">Fiecare piesă e creată cu dragoste, inspirată din lumea magică a copilăriei — rafinament discret care încântă și părinții, și copiii.</p>
       </div>
       <div class="value-card reveal" style="transition-delay: 0.3s">
         <div class="value-icon">✨</div>
-        <h3 class="value-title">Calitate Gentle</h3>
-        <p class="value-text">
-          Colecția Gentle înseamnă rafinament în fiecare detaliu — cusături îngrijite,
-          culori care rezistă, confort pe tot parcursul zilei.
-        </p>
+        <h3 class="value-title" data-i18n="values.v3.title">Calitate Gentle</h3>
+        <p class="value-text" data-i18n="values.v3.text">Colecția Gentle înseamnă rafinament în fiecare detaliu — cusături îngrijite, culori care rezistă, confort pe tot parcursul zilei.</p>
       </div>
     </div>
   </div>
@@ -1343,62 +1334,54 @@
 <!-- ── TESTIMONIALS ── -->
 <section class="testimonials">
   <div class="section-header reveal">
-    <span class="section-label">Ce spun mamele</span>
-    <h2 class="section-title">Cuvinte din inimă</h2>
+    <span class="section-label" data-i18n="testi.label">Ce spun mamele</span>
+    <h2 class="section-title" data-i18n="testi.title">Cuvinte din inimă</h2>
   </div>
   <div class="testi-grid">
     <div class="testi-card reveal">
       <div class="testi-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">
-        Salut, astăzi am primit costumașul. E foarte frumos, mulțumesc și pentru cadou! ❤️
-      </p>
-      <span class="testi-author">— Client fidel DiDiKidsMD</span>
+      <p class="testi-text" data-i18n="testi.t1">Salut, astăzi am primit costumașul. E foarte frumos, mulțumesc și pentru cadou! ❤️</p>
+      <span class="testi-author" data-i18n="testi.author">— Client fidel DiDiKidsMD</span>
     </div>
     <div class="testi-card reveal" style="transition-delay: 0.15s">
       <div class="testi-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">
-        La sigur dacă mi-aș permite i-aș lua toate costumașele — cât de frumoase sunt și calitative, sunt atât de molicuțe la atingere... Vă mulțumesc încă odată. ❤️
-      </p>
-      <span class="testi-author">— Client fidel DiDiKidsMD</span>
+      <p class="testi-text" data-i18n="testi.t2">La sigur dacă mi-aș permite i-aș lua toate costumașele — cât de frumoase sunt și calitative, sunt atât de molicuțe la atingere... Vă mulțumesc încă odată. ❤️</p>
+      <span class="testi-author" data-i18n="testi.author">— Client fidel DiDiKidsMD</span>
     </div>
     <div class="testi-card reveal" style="transition-delay: 0.3s">
       <div class="testi-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">
-        Bună ziua! Am vrut să vă mulțumesc mult! Sunt destul de calitative, gingașe, sunt fără miros — ce e foarte important pentru mine. Poza coincide cu realitatea. Și dacă o să mai aveți ceva frumos, sunt cointeresată în costumașele dvs. 😊
-      </p>
-      <span class="testi-author">— Client fidel DiDiKidsMD</span>
+      <p class="testi-text" data-i18n="testi.t3">Bună ziua! Am vrut să vă mulțumesc mult! Sunt destul de calitative, gingașe, sunt fără miros — ce e foarte important pentru mine. Poza coincide cu realitatea. Și dacă o să mai aveți ceva frumos, sunt cointeresată în costumașele dvs. 😊</p>
+      <span class="testi-author" data-i18n="testi.author">— Client fidel DiDiKidsMD</span>
     </div>
     <div class="testi-card reveal" style="transition-delay: 0.45s">
       <div class="testi-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">
-        Bună seara! Am primit comanda!! ✨ Sunt foarte mulțumită. Cu cea mai înaltă calitate, este foarte fin și gingaș la atingere!!! Vă mulțumesc mult. 💕
-      </p>
-      <span class="testi-author">— Client fidel DiDiKidsMD</span>
+      <p class="testi-text" data-i18n="testi.t4">Bună seara! Am primit comanda!! ✨ Sunt foarte mulțumită. Cu cea mai înaltă calitate, este foarte fin și gingaș la atingere!!! Vă mulțumesc mult. 💕</p>
+      <span class="testi-author" data-i18n="testi.author">— Client fidel DiDiKidsMD</span>
     </div>
   </div>
 </section>
 
 <!-- ── INSTAGRAM CTA ── -->
 <section class="insta-cta" id="contact">
-  <p class="insta-label">Urmărește-ne</p>
-  <h2 class="insta-title">Momente prețioase,<br>în fiecare zi</h2>
+  <p class="insta-label" data-i18n="social.label">Urmărește-ne</p>
+  <h2 class="insta-title" data-i18n="social.title">Momente prețioase,<br>în fiecare zi</h2>
   <p class="insta-handle">@didikidsmd</p>
   <div style="display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap;">
     <a href="https://t.me/didikidsmd" target="_blank" class="insta-btn">
       <span class="insta-icon">✈️</span>
-      Urmărește pe Telegram
+      <span data-i18n="social.tg">Urmărește pe Telegram</span>
     </a>
     <a href="https://instagram.com/didikidsmd" target="_blank" class="insta-btn">
       <span class="insta-icon">📸</span>
-      Urmărește pe Instagram
+      <span data-i18n="social.ig">Urmărește pe Instagram</span>
     </a>
     <a href="https://www.facebook.com/people/didikidsmd/61573466164142/" target="_blank" class="insta-btn">
       <span class="insta-icon">👍</span>
-      Urmărește pe Facebook
+      <span data-i18n="social.fb">Urmărește pe Facebook</span>
     </a>
   </div>
 </section>
@@ -1409,19 +1392,19 @@
     <div class="footer-brand">
       <img src="images/logo-bear.png" alt="DiDiKidsMD"/>
       <p class="footer-brand-name">didikidsmd</p>
-      <p class="footer-tagline">Haine care îmbrățișează copilăria.<br>Inspirată de mămici pentru mămici.</p>
+      <p class="footer-tagline" data-i18n="footer.tagline">Haine care îmbrățișează copilăria.<br>Inspirată de mămici pentru mămici.</p>
     </div>
 
     <div>
-      <p class="footer-col-title">Colecții</p>
+      <p class="footer-col-title" data-i18n="footer.collections">Colecții</p>
       <ul class="footer-links">
-        <li><a href="#catalog">Fete</a></li>
-        <li><a href="#catalog">Băieți</a></li>
+        <li><a href="#catalog" data-i18n="catalog.tab.fete.short">Fete</a></li>
+        <li><a href="#catalog" data-i18n="catalog.tab.baieti.short">Băieți</a></li>
       </ul>
     </div>
 
     <div>
-      <p class="footer-col-title">Contact</p>
+      <p class="footer-col-title" data-i18n="footer.contact">Contact</p>
       <ul class="footer-links">
         <li><a href="https://t.me/didikidsmd_bot" target="_blank">Telegram Bot</a></li>
         <li><a href="https://instagram.com/didikidsmd" target="_blank">Instagram</a></li>
@@ -1431,7 +1414,7 @@
   </div>
 
   <div class="footer-bottom">
-    <span>© 2026 DiDiKidsMD. Toate drepturile rezervate.</span>
+    <span data-i18n="footer.copyright">© 2026 DiDiKidsMD. Toate drepturile rezervate.</span>
     <span>Made with ❤︎ in Moldova</span>
   </div>
 </footer>
@@ -1465,18 +1448,138 @@
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
 
+  /* ── I18N ── */
+  const LANGS = {
+    ro: {
+      'nav.catalog':'Catalog','nav.about':'Despre noi','nav.contact':'Contact','nav.values':'Filosofie',
+      'ticker':'🐻 Fete & Băieți &nbsp;•&nbsp; 🚚 Livrare gratuită pe tot teritoriul Moldovei &nbsp;•&nbsp; 🌿 Materiale naturale, blânde pentru pielea copilului &nbsp;•&nbsp; ✨ Design cu suflet inspirat de mămici pentru mămici &nbsp;•&nbsp;',
+      'hero.label':'Fete & Băieți','hero.tagline':'Haine care îmbrățișează copilăria.','hero.btn1':'Descoperă colecția','hero.btn2':'🤖 Comandă pe Telegram',
+      'delivery.label':'Livrare','delivery.title':'Livrăm la tine acasă','delivery.sub':'Rapid, sigur și fără costuri suplimentare.',
+      'delivery.posta.avail':'Disponibil în toată Moldova','delivery.posta.name':'Poșta Moldovei','delivery.posta.desc':'Livrare în 2–3 zile lucrătoare la cel mai apropiat oficiu poștal.',
+      'delivery.curier.avail':'Disponibil în toată Moldova','delivery.curier.name':'Curier','delivery.curier.desc':'Livrare în 2–3 zile lucrătoare direct la ușa ta, oriunde în Republica Moldova.',
+      'delivery.free.title':'Livrare GRATUITĂ','delivery.free.sub':'pe tot teritoriul Republicii Moldova',
+      'catalog.label':'Colecția noastră','catalog.title':'Eleganță pentru cei mai mici','catalog.tab.fete':'🎀 Fete','catalog.tab.baieti':'🚀 Băieți',
+      'catalog.tab.fete.short':'Fete','catalog.tab.baieti.short':'Băieți',
+      'cart.title':'Coșul meu','cart.total':'Total','cart.order':'Comandă acum','cart.contact':'Contactează-ne ▾','cart.contact.tg':'Contactează-ne pe Telegram',
+      'cart.empty':'🐻<br><br>Coșul tău e gol.<br>Adaugă produse din catalog!','cart.size':'Mărimea','cart.qty':'Cantitate',
+      'fav.title':'♥ Favorite','fav.empty':'♡<br><br>Niciun produs salvat.<br>Apasă ♡ pe produsele care îți plac!',
+      'banner.title':'Hăinuțe pentru fete și băieți','banner.text':'Culori luminoase, țesături naturale și croieli gânditoare — pentru copiii care merită tot ce e mai bun.','banner.btn':'Descoperă acum',
+      'about.label':'Povestea noastră','about.title':'Creat cu dragoste,<br>pentru cei mai mici',
+      'about.p1':'La DiDiKidsMD credem că fiecare copil merită hăinuțe care îl lasă să exploreze lumea liber, să râdă, să alerge și să viseze — fără restricții, fără disconfort.',
+      'about.p2':'Alegem cu grijă fiecare material: bumbac organic, țesături blânde, culori naturale, care nu irită pielea sensibilă a celor mici și rezistă la aventurile de zi cu zi.',
+      'about.p3':'Fiecare piesă din colecția noastră este gândită cu suflet — pentru că copilăria e cea mai frumoasă aventură, și hăinuțele trebuie să o celebreze.',
+      'values.label':'Filosofia noastră','values.title':'De ce DiDiKidsMD?',
+      'values.v1.title':'Materiale naturale','values.v1.text':'Bumbac organic, muselină și țesături certificate — prietenoase cu pielea sensibilă a copiilor și cu mediul înconjurător.',
+      'values.v2.title':'Design cu suflet','values.v2.text':'Fiecare piesă e creată cu dragoste, inspirată din lumea magică a copilăriei — rafinament discret care încântă și părinții, și copiii.',
+      'values.v3.title':'Calitate Gentle','values.v3.text':'Colecția Gentle înseamnă rafinament în fiecare detaliu — cusături îngrijite, culori care rezistă, confort pe tot parcursul zilei.',
+      'testi.label':'Ce spun mamele','testi.title':'Cuvinte din inimă','testi.author':'— Client fidel DiDiKidsMD',
+      'testi.t1':'Salut, astăzi am primit costumașul. E foarte frumos, mulțumesc și pentru cadou! ❤️',
+      'testi.t2':'La sigur dacă mi-aș permite i-aș lua toate costumașele — cât de frumoase sunt și calitative, sunt atât de molicuțe la atingere... Vă mulțumesc încă odată. ❤️',
+      'testi.t3':'Bună ziua! Am vrut să vă mulțumesc mult! Sunt destul de calitative, gingașe, sunt fără miros — ce e foarte important pentru mine. Poza coincide cu realitatea. Și dacă o să mai aveți ceva frumos, sunt cointeresată în costumașele dvs. 😊',
+      'testi.t4':'Bună seara! Am primit comanda!! ✨ Sunt foarte mulțumită. Cu cea mai înaltă calitate, este foarte fin și gingaș la atingere!!! Vă mulțumesc mult. 💕',
+      'social.label':'Urmărește-ne','social.title':'Momente prețioase,<br>în fiecare zi','social.tg':'Urmărește pe Telegram','social.ig':'Urmărește pe Instagram','social.fb':'Urmărește pe Facebook',
+      'footer.collections':'Colecții','footer.contact':'Contact','footer.tagline':'Haine care îmbrățișează copilăria.<br>Inspirată de mămici pentru mămici.','footer.copyright':'© 2026 DiDiKidsMD. Toate drepturile rezervate.',
+      'cat.toate':'Toate produsele','cat.rochie':'Rochițe','cat.costum':'Costume','cat.sport':'Sport',
+      'prod.select':'Selectează','prod.loading':'Se încarcă produsele...','prod.empty':'Produse în curs de adăugare...',
+      'modal.sizes':'Mărimi disponibile','modal.guide':'Ghid mărimi','modal.size.col':'Mărime','modal.age.col':'Vârstă','modal.height.col':'Înălțime',
+      'prod.fav.add':'♡ Adaugă la favorite','prod.fav.saved':'♥ Salvat la favorite','prod.add':'Adaugă în coș','prod.added':'✓ Adăugat!',
+      'order.title':'Completează comanda','order.subtitle':'Vei primi o confirmare pe email după ce comanda e procesată.',
+      'order.summary':'Rezumat comandă','order.total':'Total','order.personal':'Date personale',
+      'order.name':'Nume și prenume *','order.phone':'Telefon *','order.email':'Email *',
+      'order.delivery':'Livrare','order.method':'Metodă de livrare *','order.select':'— Selectează —',
+      'order.posta':'Poșta Moldovei','order.curier':'Curier',
+      'order.city':'Localitate *','order.address':'Adresă *','order.note.label':'Observații (opțional)',
+      'order.note.ph':'ex: Preferați livrare după ora 18:00, culoare specifică, altă cerere...',
+      'order.submit':'Trimite comanda','order.sending':'Se trimite...',
+      'order.success.title':'Comanda a fost trimisă!','order.success.msg':'Mulțumim, <strong>$name</strong>!<br>Vei primi o confirmare pe <strong>$email</strong><br>în cel mai scurt timp.',
+      'order.error':'A apărut o eroare. Încearcă din nou sau comandă pe Telegram.',
+      'cart.item.size':'Mări.','order.item.size':'Mări.','modal.pick.size':'Selectează mai întâi mărimea',
+    },
+    ru: {
+      'nav.catalog':'Каталог','nav.about':'О нас','nav.contact':'Контакты','nav.values':'Философия',
+      'ticker':'🐻 Девочки & Мальчики &nbsp;•&nbsp; 🚚 Бесплатная доставка по всей Молдове &nbsp;•&nbsp; 🌿 Натуральные материалы, мягкие для кожи ребёнка &nbsp;•&nbsp; ✨ Дизайн с душой, вдохновлённый мамами для мам &nbsp;•&nbsp;',
+      'hero.label':'Девочки & Мальчики','hero.tagline':'Одежда, которая обнимает детство.','hero.btn1':'Открыть коллекцию','hero.btn2':'🤖 Заказать в Telegram',
+      'delivery.label':'Доставка','delivery.title':'Доставляем к вам домой','delivery.sub':'Быстро, надёжно и без дополнительных расходов.',
+      'delivery.posta.avail':'Доступно по всей Молдове','delivery.posta.name':'Почта Молдовы','delivery.posta.desc':'Доставка за 2–3 рабочих дня в ближайшее почтовое отделение.',
+      'delivery.curier.avail':'Доступно по всей Молдове','delivery.curier.name':'Курьер','delivery.curier.desc':'Доставка за 2–3 рабочих дня прямо к вашей двери, по всей Республике Молдова.',
+      'delivery.free.title':'БЕСПЛАТНАЯ доставка','delivery.free.sub':'по всей территории Республики Молдова',
+      'catalog.label':'Наша коллекция','catalog.title':'Элегантность для самых маленьких','catalog.tab.fete':'🎀 Девочки','catalog.tab.baieti':'🚀 Мальчики',
+      'catalog.tab.fete.short':'Девочки','catalog.tab.baieti.short':'Мальчики',
+      'cart.title':'Моя корзина','cart.total':'Итого','cart.order':'Заказать сейчас','cart.contact':'Связаться с нами ▾','cart.contact.tg':'Написать нам в Telegram',
+      'cart.empty':'🐻<br><br>Ваша корзина пуста.<br>Добавьте товары из каталога!','cart.size':'Размер','cart.qty':'Количество',
+      'fav.title':'♥ Избранное','fav.empty':'♡<br><br>Нет сохранённых товаров.<br>Нажмите ♡ на понравившихся товарах!',
+      'banner.title':'Одежда для девочек и мальчиков','banner.text':'Яркие цвета, натуральные ткани и продуманные фасоны — для детей, которые заслуживают лучшего.','banner.btn':'Открыть сейчас',
+      'about.label':'Наша история','about.title':'Создано с любовью,<br>для самых маленьких',
+      'about.p1':'В DiDiKidsMD мы верим, что каждый ребёнок заслуживает одежды, которая позволяет ему свободно исследовать мир, смеяться, бегать и мечтать — без ограничений и дискомфорта.',
+      'about.p2':'Мы тщательно выбираем каждый материал: органический хлопок, мягкие ткани, натуральные цвета, которые не раздражают нежную кожу малышей и выдерживают повседневные приключения.',
+      'about.p3':'Каждая вещь из нашей коллекции создана с душой — ведь детство — это самое прекрасное приключение, и одежда должна его праздновать.',
+      'values.label':'Наша философия','values.title':'Почему DiDiKidsMD?',
+      'values.v1.title':'Натуральные материалы','values.v1.text':'Органический хлопок, муслин и сертифицированные ткани — бережные к чувствительной коже детей и к окружающей среде.',
+      'values.v2.title':'Дизайн с душой','values.v2.text':'Каждая вещь создана с любовью, вдохновлена волшебным миром детства — изысканность, которая радует и родителей, и детей.',
+      'values.v3.title':'Качество Gentle','values.v3.text':'Коллекция Gentle — это изысканность в каждой детали: аккуратные швы, стойкие цвета, комфорт на протяжении всего дня.',
+      'testi.label':'Что говорят мамы','testi.title':'Слова от сердца','testi.author':'— Постоянный клиент DiDiKidsMD',
+      'testi.t1':'Привет, сегодня получила костюмчик. Очень красивый, спасибо и за подарок! ❤️',
+      'testi.t2':'Точно, если бы могла — купила бы все костюмчики — такие красивые и качественные, такие мягкие на ощупь... Спасибо вам ещё раз. ❤️',
+      'testi.t3':'Добрый день! Хотела поблагодарить вас! Достаточно качественные, нежные, без запаха — что для меня очень важно. Фото совпадает с реальностью. И если будет что-то красивое, мне интересны ваши костюмчики. 😊',
+      'testi.t4':'Добрый вечер! Получила заказ!! ✨ Очень довольна. Высочайшее качество, очень нежный на ощупь!!! Большое спасибо. 💕',
+      'social.label':'Подписывайтесь','social.title':'Драгоценные моменты,<br>каждый день','social.tg':'Подписаться в Telegram','social.ig':'Подписаться в Instagram','social.fb':'Подписаться на Facebook',
+      'footer.collections':'Коллекции','footer.contact':'Контакты','footer.tagline':'Одежда, которая обнимает детство.<br>Вдохновлено мамами для мам.','footer.copyright':'© 2026 DiDiKidsMD. Все права защищены.',
+      'cat.toate':'Все товары','cat.rochie':'Платья','cat.costum':'Костюмы','cat.sport':'Спорт',
+      'prod.select':'Выбрать','prod.loading':'Загрузка товаров...','prod.empty':'Товары добавляются...',
+      'modal.sizes':'Доступные размеры','modal.guide':'Таблица размеров','modal.size.col':'Размер','modal.age.col':'Возраст','modal.height.col':'Рост',
+      'prod.fav.add':'♡ В избранное','prod.fav.saved':'♥ В избранном','prod.add':'В корзину','prod.added':'✓ Добавлено!',
+      'order.title':'Оформить заказ','order.subtitle':'Вы получите подтверждение на email после обработки заказа.',
+      'order.summary':'Сводка заказа','order.total':'Итого','order.personal':'Личные данные',
+      'order.name':'Имя и фамилия *','order.phone':'Телефон *','order.email':'Email *',
+      'order.delivery':'Доставка','order.method':'Способ доставки *','order.select':'— Выберите —',
+      'order.posta':'Почта Молдовы','order.curier':'Курьер',
+      'order.city':'Населённый пункт *','order.address':'Адрес *','order.note.label':'Примечания (необязательно)',
+      'order.note.ph':'Доставка после 18:00, особый цвет, другое пожелание...',
+      'order.submit':'Отправить заказ','order.sending':'Отправляем...',
+      'order.success.title':'Заказ отправлен!','order.success.msg':'Спасибо, <strong>$name</strong>!<br>Мы свяжемся с вами как можно скорее на <strong>$email</strong>.',
+      'order.error':'Произошла ошибка. Попробуйте снова или напишите нам в Telegram.',
+      'cart.item.size':'Разм.','order.item.size':'Разм.','modal.pick.size':'Сначала выберите размер',
+    }
+  };
+
+  let currentLang = localStorage.getItem('didi_lang') || 'ro';
+
+  function t(key) {
+    return (LANGS[currentLang] || LANGS.ro)[key] || key;
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('didi_lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.lang === lang)
+    );
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.innerHTML = t(el.getAttribute('data-i18n'));
+    });
+    // Rebuild ticker (duplicated text for scroll animation)
+    const ticker = t('ticker');
+    const ann = document.getElementById('announceInner');
+    if (ann) ann.innerHTML = ticker + ' ' + ticker;
+    // Re-render dynamic catalog/cart
+    renderFilters();
+    renderProducts();
+    renderCart();
+    renderFavDrawer();
+  }
+
   /* ── CATALOG CONFIG ── */
   const CATEGORIES = {
     fete:   [
-      { id:'toate',   label:'Toate produsele' },
-      { id:'rochie',  label:'Rochițe',  keyword:'rochie' },
-      { id:'costum',  label:'Costume',  keyword:'costum' },
-      { id:'sport',   label:'Sport',    keyword:'sport'  },
+      { id:'toate',   label:'cat.toate' },
+      { id:'rochie',  label:'cat.rochie', keyword:'rochie' },
+      { id:'costum',  label:'cat.costum', keyword:'costum' },
+      { id:'sport',   label:'cat.sport',  keyword:'sport'  },
     ],
     baieti: [
-      { id:'toate',   label:'Toate produsele' },
-      { id:'costum',  label:'Costume',  keyword:'costum' },
-      { id:'sport',   label:'Sport',    keyword:'sport'  },
+      { id:'toate',   label:'cat.toate' },
+      { id:'costum',  label:'cat.costum', keyword:'costum' },
+      { id:'sport',   label:'cat.sport',  keyword:'sport'  },
     ]
   };
 
@@ -1560,7 +1663,7 @@
 
   async function loadProducts() {
     try {
-      document.getElementById('productsGrid').innerHTML = '<p class="products-empty">Se încarcă produsele...</p>';
+      document.getElementById('productsGrid').innerHTML = `<p class="products-empty">${t('prod.loading')}</p>`;
       const res  = await fetch('/api/catalog');
       const data = await res.json();
       PRODUCTS = (data.products || []).map(p => {
@@ -1604,7 +1707,7 @@
     document.getElementById('catFilters').innerHTML =
       CATEGORIES[currentGender].map(c => `
         <button class="cat-filter ${c.id === currentCat ? 'active' : ''}"
-                onclick="setCategory('${c.id}')">${c.label}</button>
+                onclick="setCategory('${c.id}')">${t(c.label)}</button>
       `).join('');
   }
 
@@ -1631,7 +1734,7 @@
     const pag  = document.getElementById('pagination');
     const list = filterProducts();
     if (!list.length) {
-      grid.innerHTML = '<p class="products-empty">Produse în curs de adăugare...</p>';
+      grid.innerHTML = `<p class="products-empty">${t('prod.empty')}</p>`;
       pag.innerHTML  = '';
       return;
     }
@@ -1649,7 +1752,7 @@
           <div class="prod-img-wrap">
             ${imgHtml}
             <div class="card-overlay">
-              <button class="card-select-btn">Selectează</button>
+              <button class="card-select-btn">${t('prod.select')}</button>
             </div>
             <button class="card-fav ${isFav ? 'active' : ''}"
                     onclick="event.stopPropagation();toggleFav('${p.cod}',this)">
@@ -1704,15 +1807,15 @@
       <h2 class="modal-name">${p.name}</h2>
       <p class="modal-price">${p.pret ? p.pret + ' MDL' : '— MDL'}</p>
       <div>
-        <p class="modal-sizes-title">Mărimi disponibile</p>
+        <p class="modal-sizes-title">${t('modal.sizes')}</p>
         <div class="modal-sizes">${sizeChips}</div>
       </div>
       <div>
         <button class="size-guide-toggle" onclick="toggleSizeGuide()">
-          📏 Ghid mărimi
+          📏 ${t('modal.guide')}
         </button>
         <table class="size-guide-table" id="sizeGuideTable">
-          <thead><tr><th>Mărime</th><th>Vârstă</th><th>Înălțime</th></tr></thead>
+          <thead><tr><th>${t('modal.size.col')}</th><th>${t('modal.age.col')}</th><th>${t('modal.height.col')}</th></tr></thead>
           <tbody>${guideRows}</tbody>
         </table>
       </div>
@@ -1724,11 +1827,11 @@
       <div class="modal-actions">
         <button class="btn-modal-cart" id="modalCartBtn" disabled
                 onclick="addToCartFromModal('${p.cod}')">
-          Selectează mai întâi mărimea
+          ${t('modal.pick.size')}
         </button>
         <button class="btn-modal-fav ${isFav ? 'active' : ''}" id="modalFavBtn"
                 onclick="toggleFavModal('${p.cod}')">
-          ${isFav ? '♥ Salvat la favorite' : '♡ Adaugă la favorite'}
+          ${isFav ? t('prod.fav.saved') : t('prod.fav.add')}
         </button>
       </div>
     `;
@@ -1752,7 +1855,7 @@
     modalSelectedSize = size;
     const cartBtn = document.getElementById('modalCartBtn');
     cartBtn.disabled = false;
-    cartBtn.textContent = 'Adaugă în coș';
+    cartBtn.textContent = t('prod.add');
   }
 
   function toggleSizeGuide() {
@@ -1774,9 +1877,9 @@
     saveCart();
     updateCartBadge();
     const btn = document.getElementById('modalCartBtn');
-    btn.textContent = '✓ Adăugat în coș!';
+    btn.textContent = t('prod.added');
     btn.style.background = 'var(--gold)';
-    setTimeout(() => { btn.textContent = 'Adaugă în coș'; btn.style.background = ''; }, 2000);
+    setTimeout(() => { btn.textContent = t('prod.add'); btn.style.background = ''; }, 2000);
   }
 
   function toggleFavModal(cod) {
@@ -1785,11 +1888,11 @@
     if (idx > -1) {
       favorites.splice(idx, 1);
       btn.classList.remove('active');
-      btn.textContent = '♡ Adaugă la favorite';
+      btn.textContent = t('prod.fav.add');
     } else {
       favorites.push(cod);
       btn.classList.add('active');
-      btn.textContent = '♥ Salvat la favorite';
+      btn.textContent = t('prod.fav.saved');
     }
     localStorage.setItem('didi_favs', JSON.stringify(favorites));
     updateFavBadge();
@@ -1828,7 +1931,7 @@
     const body = document.getElementById('favBody');
     const favProds = PRODUCTS.filter(p => favorites.includes(p.cod));
     if (!favProds.length) {
-      body.innerHTML = '<div class="cart-empty-msg">♡<br><br>Niciun produs salvat.<br>Apasă ♡ pe produsele care îți plac!</div>';
+      body.innerHTML = `<div class="cart-empty-msg">${t('fav.empty')}</div>`;
       return;
     }
     body.innerHTML = favProds.map(p => {
@@ -1895,7 +1998,7 @@
     const body = document.getElementById('cartBody');
     const foot = document.getElementById('cartFoot');
     if (!cart.length) {
-      body.innerHTML = '<div class="cart-empty-msg">🐻<br><br>Coșul tău e gol.<br>Adaugă produse din catalog!</div>';
+      body.innerHTML = `<div class="cart-empty-msg">${t('cart.empty')}</div>`;
       foot.style.display = 'none';
       return;
     }
@@ -1908,7 +2011,7 @@
         <div class="cart-item-info">
           <p class="cart-item-cod">${item.cod}</p>
           <p class="cart-item-name">${item.name}</p>
-          <p class="cart-item-meta">Mărimea ${item.size} · Cantitate: ${item.qty}</p>
+          <p class="cart-item-meta">${t('cart.size')} ${item.size} · ${t('cart.qty')}: ${item.qty}</p>
           <p class="cart-item-price">${item.pret ? item.pret + ' MDL' : '— MDL'}</p>
         </div>
         <button class="cart-item-del" onclick="removeFromCart('${item.key}')">✕</button>
@@ -1932,6 +2035,18 @@
   loadProducts();
   updateCartBadge();
   updateFavBadge();
+  // Apply stored language (updates static elements + lang buttons)
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.lang === currentLang)
+  );
+  if (currentLang !== 'ro') {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.innerHTML = t(el.getAttribute('data-i18n'));
+    });
+    const ticker = t('ticker');
+    const ann = document.getElementById('announceInner');
+    if (ann) ann.innerHTML = ticker + ' ' + ticker;
+  }
 
   /* ── ORDER FORM ── */
   function openOrderForm() {
@@ -1955,68 +2070,68 @@
     const orderTotal = cart.reduce((s,i) => s + (Number(i.pret)||0) * i.qty, 0);
     const summary = cart.map(i => `
       <div class="order-summary-item">
-        <span>${i.name} · Mări. ${i.size} × ${i.qty}</span>
+        <span>${i.name} · ${t('order.item.size')} ${i.size} × ${i.qty}</span>
         <span>${i.pret ? Number(i.pret) * i.qty + ' MDL' : '— MDL'}</span>
       </div>
     `).join('');
 
     document.getElementById('orderContent').innerHTML = `
-      <h2 class="order-title">Completează comanda</h2>
-      <p class="order-subtitle">Vei primi o confirmare pe email după ce comanda e procesată.</p>
+      <h2 class="order-title">${t('order.title')}</h2>
+      <p class="order-subtitle">${t('order.subtitle')}</p>
 
       <div class="order-summary">
-        <p class="order-summary-title">Rezumat comandă</p>
+        <p class="order-summary-title">${t('order.summary')}</p>
         ${summary}
         <div class="order-summary-total">
-          <span>Total</span>
+          <span>${t('order.total')}</span>
           <span>${orderTotal > 0 ? orderTotal + ' MDL' : '— MDL'}</span>
         </div>
       </div>
 
       <form id="orderForm" onsubmit="submitOrder(event)">
-        <p class="form-divider">Date personale</p>
+        <p class="form-divider">${t('order.personal')}</p>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Nume și prenume *</label>
+            <label class="form-label">${t('order.name')}</label>
             <input class="form-input" type="text" name="nume" placeholder="ex: Maria Ionescu" required/>
           </div>
           <div class="form-group">
-            <label class="form-label">Telefon *</label>
+            <label class="form-label">${t('order.phone')}</label>
             <input class="form-input" type="tel" name="telefon" placeholder="ex: +373 69 123 456" required/>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Email *</label>
+          <label class="form-label">${t('order.email')}</label>
           <input class="form-input" type="email" name="email" placeholder="ex: maria@gmail.com" required/>
         </div>
 
-        <p class="form-divider">Livrare</p>
+        <p class="form-divider">${t('order.delivery')}</p>
         <div class="form-group">
-          <label class="form-label">Metodă de livrare *</label>
+          <label class="form-label">${t('order.method')}</label>
           <select class="form-select" name="livrare" required>
-            <option value="">— Selectează —</option>
-            <option value="Poșta Moldovei">Poșta Moldovei</option>
-            <option value="Curier">Curier</option>
+            <option value="">${t('order.select')}</option>
+            <option value="Poșta Moldovei">${t('order.posta')}</option>
+            <option value="Curier">${t('order.curier')}</option>
           </select>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Localitate *</label>
+            <label class="form-label">${t('order.city')}</label>
             <input class="form-input" type="text" name="localitate" placeholder="ex: Chișinău" required/>
           </div>
           <div class="form-group">
-            <label class="form-label">Adresă *</label>
+            <label class="form-label">${t('order.address')}</label>
             <input class="form-input" type="text" name="adresa" placeholder="ex: str. Ștefan cel Mare 10" required/>
           </div>
         </div>
 
         <div class="form-group" style="margin-top:.5rem">
-          <label class="form-label">Observații (opțional)</label>
-          <textarea class="form-input" name="nota_client" rows="2" style="resize:vertical;font-family:inherit" placeholder="ex: Preferați livrare după ora 18:00, culoare specifică, altă cerere..."></textarea>
+          <label class="form-label">${t('order.note.label')}</label>
+          <textarea class="form-input" name="nota_client" rows="2" style="resize:vertical;font-family:inherit" placeholder="${t('order.note.ph')}"></textarea>
         </div>
 
         <button class="btn-submit-order" type="submit" id="submitOrderBtn">
-          Trimite comanda
+          ${t('order.submit')}
         </button>
       </form>
     `;
@@ -2031,7 +2146,7 @@
     data.cart    = cart;
 
     btn.disabled    = true;
-    btn.textContent = 'Se trimite...';
+    btn.textContent = t('order.sending');
 
     try {
       const res = await fetch('/api/order', {
@@ -2047,11 +2162,9 @@
         document.getElementById('orderContent').innerHTML = `
           <div class="order-success">
             <div class="order-success-icon">🐻</div>
-            <h2 class="order-success-title">Comanda a fost trimisă!</h2>
+            <h2 class="order-success-title">${t('order.success.title')}</h2>
             <p class="order-success-msg">
-              Mulțumim, <strong>${data.nume}</strong>!<br>
-              Vei primi o confirmare pe <strong>${data.email}</strong><br>
-              în cel mai scurt timp.
+              ${t('order.success.msg').replace('$name', data.nume).replace('$email', data.email)}
             </p>
           </div>
         `;
@@ -2061,8 +2174,8 @@
       }
     } catch {
       btn.disabled    = false;
-      btn.textContent = 'Trimite comanda';
-      alert('A apărut o eroare. Încearcă din nou sau comandă pe Telegram.');
+      btn.textContent = t('order.submit');
+      alert(t('order.error'));
     }
   }
 
