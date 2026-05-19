@@ -354,6 +354,31 @@
       max-width: 860px;
       margin: 0 auto;
     }
+    .livrare-gratuit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, #5c2d4a 0%, #8b5a72 100%);
+      color: var(--cream);
+    }
+    .livrare-gratuit-icon { font-size: 2rem; flex-shrink: 0; }
+    .livrare-gratuit-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    .livrare-gratuit-sub {
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 0.2rem;
+    }
 
     .coll-card {
       position: relative;
@@ -1064,7 +1089,7 @@
 <!-- Mobile nav -->
 <div class="nav-mobile" id="navMobile">
   <button class="nav-mobile-close" id="navClose">✕</button>
-  <a href="#colectii" onclick="closeNav()">Colecții</a>
+  <a href="#catalog" onclick="closeNav()">Colecții</a>
   <a href="#despre"   onclick="closeNav()">Despre noi</a>
   <a href="#valori"   onclick="closeNav()">Filosofie</a>
   <a href="#contact"  onclick="closeNav()">Contact</a>
@@ -1099,43 +1124,49 @@
     <p class="tagline">Haine care îmbrățișează copilăria.</p>
     <div class="hero-divider"></div>
     <div class="hero-ctas">
-      <a href="#colectii" class="btn btn-primary">Descoperă colecția</a>
+      <a href="#catalog" class="btn btn-primary">Descoperă colecția</a>
       <a href="https://t.me/didikidsmd_bot" target="_blank" class="btn btn-outline">🤖 Comandă pe Telegram</a>
     </div>
   </div>
 </section>
 
 <!-- ── COLLECTIONS ── -->
-<section class="collections" id="colectii">
+<section class="collections" id="livrare">
   <div class="section-header reveal">
-    <span class="section-label">Colecțiile noastre</span>
-    <h2 class="section-title">Pentru fete și băieți</h2>
-    <p class="section-sub">Hăinuțe create cu dragoste, pentru fiecare moment prețios.</p>
+    <span class="section-label">Livrare</span>
+    <h2 class="section-title">Livrăm la tine acasă</h2>
+    <p class="section-sub">Rapid, sigur și fără costuri suplimentare.</p>
   </div>
 
   <div class="collections-grid">
     <div class="coll-card reveal">
       <div class="coll-img coll-img-1">
-        <span class="coll-icon">🎀</span>
+        <span class="coll-icon">📮</span>
       </div>
       <div class="coll-body">
-        <p class="coll-age">Hăinuțe pentru ea</p>
-        <h3 class="coll-name">Fete</h3>
-        <p class="coll-desc">Rochițe, costumașe și ținute gingașe — pentru micile prințese pline de viață.</p>
-        <a href="#catalog" onclick="setGender('fete')" class="coll-cta">Explorează colecția →</a>
+        <p class="coll-age">Disponibil în toată Moldova</p>
+        <h3 class="coll-name">Poșta Moldovei</h3>
+        <p class="coll-desc">Livrare în 2–3 zile lucrătoare la cel mai apropiat oficiu poștal sau la domiciliu.</p>
       </div>
     </div>
 
     <div class="coll-card reveal" style="transition-delay: 0.15s">
       <div class="coll-img coll-img-2">
-        <span class="coll-icon">🚀</span>
+        <span class="coll-icon">🏃</span>
       </div>
       <div class="coll-body">
-        <p class="coll-age">Hăinuțe pentru el</p>
-        <h3 class="coll-name">Băieți</h3>
-        <p class="coll-desc">Costume, tricouri și ținute comfy — pentru micii aventurieri mereu în mișcare.</p>
-        <a href="#catalog" onclick="setGender('baieti')" class="coll-cta">Explorează colecția →</a>
+        <p class="coll-age">Disponibil în toată Moldova</p>
+        <h3 class="coll-name">Curier</h3>
+        <p class="coll-desc">Livrare în 2–3 zile lucrătoare direct la ușa ta, oriunde în Republica Moldova.</p>
       </div>
+    </div>
+  </div>
+
+  <div class="livrare-gratuit reveal">
+    <span class="livrare-gratuit-icon">🎁</span>
+    <div>
+      <p class="livrare-gratuit-title">Livrare GRATUITĂ</p>
+      <p class="livrare-gratuit-sub">pe tot teritoriul Republicii Moldova</p>
     </div>
   </div>
 </section>
@@ -1222,7 +1253,7 @@
       Culori luminoase, țesături naturale și croieli gânditoare —
       pentru copiii care merită tot ce e mai bun.
     </p>
-    <a href="#colectii" class="btn-gold">Descoperă acum</a>
+    <a href="#catalog" class="btn-gold">Descoperă acum</a>
   </div>
 </section>
 
@@ -1368,8 +1399,8 @@
     <div>
       <p class="footer-col-title">Colecții</p>
       <ul class="footer-links">
-        <li><a href="#colectii">Fete</a></li>
-        <li><a href="#colectii">Băieți</a></li>
+        <li><a href="#catalog">Fete</a></li>
+        <li><a href="#catalog">Băieți</a></li>
       </ul>
     </div>
 
