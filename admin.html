@@ -141,6 +141,10 @@
   .badge-epuizat{background:#fff3cd;color:#856404}
   .badge-ascuns{background:#f0e8d8;color:#7a5566}
   .modal-field small{display:block;color:var(--muted);font-size:.75rem;margin-top:.25rem}
+  .marimi-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+  .mc{display:inline-block;padding:.3rem .8rem;border:1.5px solid var(--gold);border-radius:4px;font-size:.82rem;cursor:pointer;user-select:none;transition:all .2s;background:#faf6f0;color:#3a1f2d}
+  .mc:hover{background:#f0e8d8}
+  .mc.epuizat{text-decoration:line-through;opacity:.38;border-color:#ccc;background:#f5f5f5}
 
   @media(max-width:640px){
     .dashboard-body{padding:1rem}
@@ -362,8 +366,9 @@
     </div>
     <div class="modal-field">
       <label>Mărimi disponibile</label>
-      <input type="text" id="pMarimi" placeholder="ex: 100,110,120 sau 2,3,4,5 ani"/>
-      <small>Separă cu virgulă. Lasă gol dacă nu se aplică.</small>
+      <input type="text" id="pMarimi" placeholder="ex: 100,110,120 sau 2,3,4,5 ani" oninput="renderMarimiChips()"/>
+      <small>Separă cu virgulă. Lasă gol dacă nu se aplică. Click pe mărime pentru a o marca epuizată.</small>
+      <div class="marimi-chips" id="marimiChips"></div>
     </div>
     <div class="modal-field">
       <label>Categorie</label>
@@ -893,12 +898,50 @@ function openProductModal(rowIndex) {
     banner.style.display = 'none';
   }
   document.getElementById('downloadImgNote').textContent = 'Apasă 📸 Telegram pentru a descărca automat poza din Telegram.';
+  renderMarimiChips();
   document.getElementById('productModal').classList.add('open');
 }
 
 function closeProductModal() {
   document.getElementById('productModal').classList.remove('open');
   editingProductRow = null;
+}
+
+function parseMarimiList(str) {
+  if (!str) return [];
+  const s = str.trim();
+  if (s.includes(',')) return s.split(',').map(x => x.trim()).filter(Boolean);
+  const isAni = /ani/i.test(s);
+  const clean = s.replace(/\s*ani\s*/gi, '').replace(/\s*cm\s*/gi, '').trim();
+  const unit  = isAni ? ' ani' : '';
+  const parts = clean.split('-').filter(p => p.trim());
+  if (parts.length > 2) return parts.map(p => p.trim() + unit);
+  if (parts.length === 2) {
+    const start = parseInt(parts[0]), end = parseInt(parts[1]);
+    if (!isNaN(start) && !isNaN(end)) {
+      const step = isAni ? 1 : 10;
+      const sizes = [];
+      for (let v = start; v <= end; v += step) sizes.push(String(v) + unit);
+      return sizes;
+    }
+  }
+  return s ? [s] : [];
+}
+
+function renderMarimiChips() {
+  const val  = document.getElementById('pMarimi').value.trim();
+  const cont = document.getElementById('marimiChips');
+  const sizes = parseMarimiList(val);
+  cont.innerHTML = sizes.map(s =>
+    `<span class="mc" onclick="toggleMc(this)">${s}</span>`
+  ).join('');
+}
+
+function toggleMc(el) {
+  el.classList.toggle('epuizat');
+  const chips = document.querySelectorAll('#marimiChips .mc');
+  const available = [...chips].filter(c => !c.classList.contains('epuizat')).map(c => c.textContent.trim());
+  document.getElementById('pMarimi').value = available.join(', ');
 }
 
 function parseDescriere(descriere, cod) {
@@ -940,7 +983,7 @@ function autoFillFromDescriere() {
   const parsed = parseDescriere(editingProductDescriere, editingProductCod);
   if (parsed.nume)      document.getElementById('pNume').value      = parsed.nume;
   if (parsed.pret)      document.getElementById('pPret').value      = parsed.pret;
-  if (parsed.marimi)    document.getElementById('pMarimi').value    = parsed.marimi;
+  if (parsed.marimi)    { document.getElementById('pMarimi').value = parsed.marimi; renderMarimiChips(); }
   if (parsed.categorie) document.getElementById('pCategorie').value = parsed.categorie;
   if (parsed.imagine)   document.getElementById('pImagine').value   = parsed.imagine;
   document.getElementById('autoFillBanner').style.display = 'none';
