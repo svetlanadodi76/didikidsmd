@@ -264,6 +264,23 @@
     .hero-content { position: relative; z-index: 2; }
     .bear-wrap { margin: 0 auto 2rem; }
     .bear-wrap img { width: 160px; height: 160px; filter: drop-shadow(0 12px 32px rgba(92,45,74,0.22)); }
+    .hero-bear-float {
+      position: absolute;
+      left: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      width: 110px;
+      height: 110px;
+      background: rgba(250,246,240,0.82);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 28px rgba(92,45,74,0.18);
+      backdrop-filter: blur(4px);
+    }
+    .hero-bear-float img { width: 80px; height: 80px; }
     .hero-label { font-size: 0.8rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
     .brand-name { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 400; color: var(--plum); letter-spacing: -0.01em; line-height: 1; }
     .hero-script { font-family: 'Great Vibes', cursive; font-size: clamp(2.5rem, 7vw, 5rem); color: var(--gold); margin-top: 0.5rem; }
@@ -1087,15 +1104,17 @@
 <!-- ── HERO SLIDER ── -->
 <section class="hero-slider" id="hero">
 
+  <!-- Ursuleț plutitor — vizibil pe toate slide-urile -->
+  <div class="hero-bear-float">
+    <img src="images/logo-bear.png" alt="DiDiKidsMD"/>
+  </div>
+
   <!-- Slide 1: hero original -->
   <div class="hero-slide hero-slide-original active">
     <div class="hero-arc hero-arc-1"></div>
     <div class="hero-arc hero-arc-2"></div>
     <div class="hero-arc hero-arc-3"></div>
     <div class="hero-content">
-      <div class="bear-wrap">
-        <img src="images/logo-bear.png" alt="DiDiKidsMD"/>
-      </div>
       <p class="hero-label">Fete & Băieți</p>
       <h1 class="brand-name">didikidsmd</h1>
       <p class="hero-script">Gentle</p>
