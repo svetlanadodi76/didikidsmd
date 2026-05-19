@@ -234,6 +234,41 @@
       background: #fff;
     }
 
+    /* slide 1 — hero original */
+    .hero-slide-original {
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,164,184,0.18) 0%, transparent 70%), var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero-slide-original::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(92,45,74,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .hero-arc {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.2);
+      pointer-events: none;
+    }
+    .hero-arc-1 { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .hero-arc-2 { width: 720px; height: 720px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .hero-arc-3 { width: 950px; height: 950px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .hero-content { position: relative; z-index: 2; }
+    .bear-wrap { margin: 0 auto 2rem; }
+    .bear-wrap img { width: 160px; height: 160px; filter: drop-shadow(0 12px 32px rgba(92,45,74,0.22)); }
+    .hero-label { font-size: 0.8rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+    .brand-name { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 400; color: var(--plum); letter-spacing: -0.01em; line-height: 1; }
+    .hero-script { font-family: 'Great Vibes', cursive; font-size: clamp(2.5rem, 7vw, 5rem); color: var(--gold); margin-top: 0.5rem; }
+    .tagline { font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 300; font-style: italic; color: var(--text-muted); margin-top: 1rem; letter-spacing: 0.04em; }
+    .hero-divider { width: 60px; height: 1px; background: var(--gold); margin: 2rem auto; }
+    .hero-ctas { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+
     .btn {
       display: inline-block;
       padding: 0.85rem 2.6rem;
@@ -1049,21 +1084,40 @@
 
 <!-- ── HERO SLIDER ── -->
 <section class="hero-slider" id="hero">
-  <div class="hero-slide active" style="background-image:url('images/hero-1.jpg')"></div>
+
+  <!-- Slide 1: hero original -->
+  <div class="hero-slide hero-slide-original active">
+    <div class="hero-arc hero-arc-1"></div>
+    <div class="hero-arc hero-arc-2"></div>
+    <div class="hero-arc hero-arc-3"></div>
+    <div class="hero-content">
+      <div class="bear-wrap">
+        <img src="images/logo-bear.png" alt="DiDiKidsMD"/>
+      </div>
+      <p class="hero-label">Fete & Băieți</p>
+      <h1 class="brand-name">didikidsmd</h1>
+      <p class="hero-script">Gentle</p>
+      <p class="tagline">Haine care îmbrățișează copilăria.</p>
+      <div class="hero-divider"></div>
+      <div class="hero-ctas">
+        <a href="#catalog" class="btn btn-primary">Descoperă colecția</a>
+        <a href="https://t.me/didikidsmd_bot" target="_blank" class="btn btn-outline">🤖 Comandă pe Telegram</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2-5: fotografii -->
+  <div class="hero-slide" style="background-image:url('images/hero-1.jpg')"></div>
   <div class="hero-slide" style="background-image:url('images/hero-2.jpg')"></div>
   <div class="hero-slide" style="background-image:url('images/hero-3.jpg')"></div>
   <div class="hero-slide" style="background-image:url('images/hero-4.jpg')"></div>
-
-  <div class="hero-cta-wrap">
-    <a href="#catalog" class="btn btn-primary">Descoperă colecția</a>
-    <a href="https://t.me/didikidsmd_bot" target="_blank" class="btn btn-outline" style="border-color:#fff;color:#fff;">🤖 Comandă pe Telegram</a>
-  </div>
 
   <div class="slide-dots">
     <button class="dot active" onclick="goSlide(0)"></button>
     <button class="dot" onclick="goSlide(1)"></button>
     <button class="dot" onclick="goSlide(2)"></button>
     <button class="dot" onclick="goSlide(3)"></button>
+    <button class="dot" onclick="goSlide(4)"></button>
   </div>
 </section>
 
